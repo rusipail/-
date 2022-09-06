@@ -24,7 +24,7 @@
   </script>
   <main>
     <div id="sidebar" class={on ? "open" : ""} on:click={sidebarClick}>
-      <div class="option select">
+      <div class="option ">
         community
       </div>
       <div class="option">
@@ -56,7 +56,16 @@
         color: white;
         font-size: 24px;
         transition: all 0.3s;
-        margin:30px;
+        width: calc(100% - 40px);
+        line-height: calc(380% - 24px);
+        text-align: center;
+        height: 8%;
+        padding: {
+          top: 20px;
+          left: 20px;
+          right: 20px;
+          bottom: 20px;
+        };
         .select {
           border: 1px solid white;
           z-index: 3;
@@ -67,5 +76,8 @@
       // transform: translateX(0%);
       left: 0;
       transition: all 0.3s;
+    }
+    .select{
+      background-color: rgb(87, 87, 80);
     }
   </style>

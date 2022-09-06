@@ -74,7 +74,7 @@
         leejuan20070601
         </div>
         <div>
-          <input type="text" placeholder="찾을 사람을 입력하세요" id="findingPeople" bind:value={find} on:keypress= { finding }>
+          <input type="text" autocomplete="off" placeholder="찾을 사람을 입력하세요" id="findingPeople" bind:value={find} on:keypress= { finding }>
         </div>
         <div id="messageList">
           {#each mockData as data}

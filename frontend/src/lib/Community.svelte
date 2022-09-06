@@ -92,6 +92,54 @@
         {
           username: "2주안",
           comment: '좋아'
+        },
+        {
+          username: "dlwndks",
+          comment: '어쩌라고'
+        },
+        {
+          username: "leejuan",
+          comment: '응 아니야'
+        },
+        {
+          username: "이주안",
+          comment: '오히려'
+        },
+        {
+          username: "2주안",
+          comment: '좋아'
+        },
+        {
+          username: "dlwndks",
+          comment: '어쩌라고'
+        },
+        {
+          username: "leejuan",
+          comment: '응 아니야'
+        },
+        {
+          username: "이주안",
+          comment: '오히려'
+        },
+        {
+          username: "2주안",
+          comment: '좋아'
+        },
+        {
+          username: "dlwndks",
+          comment: '어쩌라고'
+        },
+        {
+          username: "leejuan",
+          comment: '응 아니야'
+        },
+        {
+          username: "이주안",
+          comment: '오히려'
+        },
+        {
+          username: "2주안",
+          comment: '좋아'
         }
       ]
     }, {
@@ -172,30 +220,38 @@
           </div>
           <div class="headline"> 
             <div class="comment">
-              <Fa 
-                class="fa"
-                icon={ faHeart }
-                size="1.8x"
+              <span class="reaction">
+                <Fa 
+                  class="fa"
+                  icon={ faHeart }
+                  size="1.8x"
               />
-              <Fa
-                class="fa"
-                icon={ faComment }
-                size="1.8x" 
-              />
-              <Fa
-                class="fa"
-                icon={ faShare }
-                size="1.8x"
-              />
+              </span>
+              <span class="reaction">
+                <Fa
+                  class="fa"
+                  icon={ faComment }
+                  size="1.8x" 
+                />
+              </span>
+              <span class="reaction">
+                <Fa
+                  class="fa"
+                  icon={ faShare }
+                  size="1.8x"
+                />
+              </span>
             </div>
             <div class="likes">
-              좋아요 {d.like}개 댓글 {d.comment.length}개
+              <strong>
+                좋아요 {d.like}개 댓글 {d.comment.length}개
+              </strong>
             </div>
           </div>
           <div class="commentBox">
-            <div class="commentUploadingBox">
+            <div class="commentUploadingBox { d.comment.length >= 4 ? 'scrollYes' : ''}" >
               {#each d.comment as comment}
-                <div class="text"><span><strong>{comment.username}</strong> </span><span>{comment.comment}</span></div>
+                <div class="texts"><span><strong>{comment.username}</strong> </span><span>{comment.comment}</span></div>
               {/each}
 
             </div>
@@ -210,18 +266,25 @@
     <style lang="scss">
       @import url('https://fonts.googleapis.com/css2?family=Gentium+Book+Plus&family=Lato:wght@300&family=Roboto:ital,wght@1,100&display=swap');
       $size: 24px;
-      $backgroundColor:rgb(28, 27, 31);
+      $backgroundColor:rgb(37, 36, 36);
       $color:rgb(208, 188, 255);
       $font: 'Lato', sans-serif;
       
-    .fa{
-      border: 5px solid $color;
+    // .fa{
+    //   border: 5px solid $color;
+    //   padding: {
+    //     top: 10px;
+    //     bottom: 10px;
+    //   };
+    // }
+    .reaction{
       padding: {
-        top: 10px;
-        bottom: 10px;
+        top: 5px;
+        left: 5px;
+        right: 10px;
       };
     }
-    .text{
+    .texts{
       padding: {
         top: 10px;
       };
@@ -290,12 +353,20 @@
         .headline{
           background-color: $backgroundColor;
           color: white;
+          height: 80px;
           .comment{
             margin: {
-              left: 10px;
+              left: 15px;
             }
+            padding: {
+              top: 10px;
+            };
           }
           .likes{
+            padding: {
+              top: 10px;
+              left: 10px;
+            };
             margin: {
               left: 10px;
             }
@@ -315,6 +386,9 @@
           color: white;
           height: 160px;
           border-radius: 0px 0px 15px 15px;
+          padding: {
+            left: 10px
+          };
           & > span{
             margin: {
               left: 20px
@@ -341,7 +415,8 @@
     border-radius: 100%;
     justify-content: center;
     padding: {
-      // left: 7px;
+      left: 3px;
+      bottom: 3px;
     }
     
     margin: auto;
@@ -443,32 +518,67 @@
     height: 100%;
   }
   .commentInput{
-    width: calc(99% - 1px);
+    width: calc(100% - 1px);
     height: 30px;
-    background-color: $backgroundColor;
+    background-color: rgb(28, 27, 31);
     position: static;
+    left: 0px;
     bottom: 0;
     border: 0;
     color: white;
+    border-radius: 20px;
   }
   .commentInput:focus-visible{
     outline-offset: 0px;;
     outline: 0;
   }
   .commentInputContainer{
-    padding-left: 5px;
-    border: 3px solid $backgroundColor;
-    width: calc(99% - 3px);
-    text-align: center;
+    margin: {
+      top: 10px
+    };
+    border: 3px solid rgb(28, 27, 31);
+    width: calc(98% - 3px);
     border-radius: 20px;
     justify-self: center;
 
   }
   .commentUploadingBox{
-    overflow-y: scroll;
+    // overflow-y: scroll;
     height: 60%;
     margin: {
       left: 10px;
     };
+  }
+  .scrollYes{
+    overflow-y: scroll;
+  }
+  .scrollYes::-webkit-scrollbar {
+    width: 10px;
+  }
+  //스크롤 바 가장 큰 부분
+
+
+  .scrollYes::-webkit-scrollbar-thumb{
+    width: 10px;
+    background-color: grey;
+    border-radius: 20px;
+    margin: {
+      right: 3px
+    };
+  }
+  //스크롤 바 움직이는 부분
+
+  .scrollYes::-webkit-scrollbar-track{
+    width: 10px;
+    margin: {
+      right: 3px
+    };
+    border-radius: 20px;
+    background-color: rgba(168, 168, 168, 0.3)  
+  }
+  //스크롤 바 나머지 부분
+  #plus{
+    width: 60px;
+    height: 60px;
   }
   </style>
