@@ -4,18 +4,22 @@
     export let on:boolean;
     export let hash:string;
     export let selectedUser;
+    let selectedHash = 'community';
     const sidebarClick = e =>{
       if(e.target.classList.contains("option")){
         if(e.target.innerHTML === "community"){
           hash = "#community";
+          selectedHash = 'community'
           on = false
           selectedUser = null;
         } else if(e.target.innerHTML === "message"){
           hash = "#message";
+          selectedHash = 'message'
           on = false
           selectedUser = null;
         } else if(e.target.innerHTML === "schedule"){
           hash = "#schedule";
+          selectedHash = 'schedule'
           on = false
           selectedUser = null;
         }
@@ -24,13 +28,13 @@
   </script>
   <main>
     <div id="sidebar" class={on ? "open" : ""} on:click={sidebarClick}>
-      <div class="option ">
+      <div class="option {selectedHash === "community" ? "select" : ""}">
         community
       </div>
-      <div class="option">
+      <div class="option {selectedHash === "message" ? "select" : ""}">
         message
       </div>
-      <div class="option">
+      <div class="option {selectedHash === "schedule" ? "select" : ""}">
         schedule
       </div>
     </div>
@@ -79,5 +83,8 @@
     }
     .select{
       background-color: rgb(87, 87, 80);
+    }
+    .option:hover{
+      border: 1px solid white;
     }
   </style>

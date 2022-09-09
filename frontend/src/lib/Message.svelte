@@ -3,7 +3,7 @@
     import type { Hash } from './type';
     import Fa from "svelte-fa/src/fa.svelte";
     import {
-      faPlus,
+      faPlus, faChevronLeft, faChevronRight
     } from "@fortawesome/free-solid-svg-icons/index.es";
     import troll from "../assets/troll.png"
     import QuestionMark from "../assets/Question_Mark.svg"
@@ -14,6 +14,7 @@
     let messageInput = '';
     let find = '';
     let findmemory = '';
+    let peoplestate = true;
     const clicked = (e) =>{
       hash = `#message?name=${e}`
       selectedUser = e;
@@ -30,6 +31,9 @@
       if(selectedUser !== e){
         window.alert('입력하신 사용자를 찾지 못하였습니다')
       }
+    }
+    const peopleToggle = () =>{
+      peoplestate = !peoplestate
     }
     const check = (e) =>{
       if(e.key == "Enter"){
@@ -69,7 +73,21 @@
   
   <main>
     <div id="container">
-      <div id="who">
+      <div id="who" class={ peoplestate ? "" : "hidden"}>
+        <div id="peopleOpenButton" on:click={ peopleToggle } class={ peoplestate ? "" : "open"}>
+          <Fa
+            icon={ faChevronRight }
+            color="white"
+            size="2x"
+          />
+        </div>
+        <div id="peopleCloseButton" on:click={ peopleToggle }>
+          <Fa
+            icon={ faChevronLeft }
+            color="white"
+            size="2x"
+          />
+        </div>
         <div id="myName">
         leejuan20070601
         </div>
@@ -78,7 +96,7 @@
         </div>
         <div id="messageList">
           {#each mockData as data}
-          <div class="people" on:click={ () => {clicked(data.recipient)} } id={data.recipient}>
+          <div class="people { selectedUser === data ? "select" : ""}" on:click={ () => {clicked(data.recipient)} } id={data.recipient}>
             <span class="profile">
               <img src={data.profile} alt="" class="img">
             </span>
@@ -94,13 +112,22 @@
           {/each}
         </div>
       </div>
-      <div id="messageContainer">
+      <div id="messageToolContainer" class={ peoplestate ? "" : "open"}>
+        <div id="messageContainer">
+          
+          <span class="myMessage">
+            안녕
+          </span>
+          <span class="receptionMessage">
+            안녕!
+          </span>
+        </div>
         <div id="message"></div>
-        <div id="inputContainer">
+        <div id="inputContainer" class={ peoplestate ? "" : "open"}>
           <div id="input" >
-            <!-- <textarea name="messageInput" id="messageInput" cols="30" rows="10" on:click={click} class={click ? "click" : ""}></textarea> -->
+            <textarea name="messageInput" id="messageInput" cols="30" rows="1" on:keypress={ check }></textarea>
             <!-- <div contenteditable="true" id="messageInput" on:input={ check } ></div> -->
-            <input type="text" id="messageInput" on:keypress={ check } bind:value={ messageInput } placeholder="메세지를 입력하세요.">
+            <!-- <input type="text" id="messageInput" on:keypress={ check } bind:value={ messageInput } placeholder="메세지를 입력하세요."> -->
           </div>
         </div>
       </div>
@@ -112,15 +139,71 @@
   <style lang="scss">
     $backgroundColor: rgb(28, 27, 31);
     $color: rgb(208, 188, 255);
+    $color2: rgb(176, 139, 255);
     $size: 17px;
+    #peopleCloseButton{
+      width: 40px;
+      height: 50px;
+      position: relative;
+      left: calc(100% - 25px);
+    }
+    #peopleOpenButton{
+      z-index: -1;
+      position: absolute;
+      background-color: $backgroundColor;
+      width: 50px;
+      height: 40px;
+      left: 0px;
+      text-align: center;
+      padding: {
+        top: 8px
+      };
+    }
+    #peopleOpenButton.open{
+      z-index: 1;
+      position: absolute;
+      background-color: $backgroundColor;
+      width: 50px;
+      height: 40px;
+      left: 0px;
+      text-align: center;
+      padding: {
+        top: 8px
+      };
+    }
+    .myMessage{
+      position: absolute;
+      right: 20px;
+      bottom: 10%;
+      background-color: $color;
+      border-radius: 20px;
+      padding: {
+        left: 10px;
+        top: 5px;
+        bottom: 5px;
+        right: 10px;
+      };
+    }
+    .receptionMessage{
+      position: absolute;
+      bottom: calc(11%);
+      background-color: $color2;
+      border-radius: 20px;
+      padding: {
+        left: 10px;
+        top: 5px;
+        bottom: 5px;
+        right: 10px;
+      };
+    }
     .img{
       width: 40px;
       height: 40px;
     }
     #findingPeople{
-      width: 100%;
+      width: calc(100% - 5px);
       height: 30px;
-      background-color: $backgroundColor;
+      background-color: rgb(37, 36, 36);
       border: 0;
       color: white;
     }
@@ -137,12 +220,12 @@
     #who{
       width: 18%;
       height: 100%;
-      background-color: black;
+      background-color: $backgroundColor;
     }
     .people{
       color: white;
-      background-color: $backgroundColor;
-      width: 100%;
+      background-color: rgb(37, 36, 36);
+      width: calc(100% - 1px);
       display: flex;
       box-sizing: border-box;
       // border: {
@@ -167,16 +250,30 @@
         left: 15px;
       }
     }
-    #messageContainer{
+    #messageToolContainer{
       width: 82%;
-      background-color: $color;
+      background-color: rgb(40, 40, 40);
+    }
+    #messageToolContainer.open{
+      width: 100%;
+      background-color: rgb(40, 40, 40);
     }
     #inputContainer{
       bottom: 0;
       position: fixed;
       width: calc(82%);
       height: 60px;
-      background-color: black;
+      background-color: $backgroundColor;
+      padding: {
+        top: 8px;
+      }
+    }
+    #inputContainer.open{
+      width: 100%;
+      bottom: 0;
+      position: fixed;
+      height: 60px;
+      background-color: $backgroundColor;
       padding: {
         top: 8px;
       }
@@ -204,12 +301,13 @@
       height: 60px;
       color: white;
       text-align: center;
+      font-size: 24px;
       padding: {
         top: 35px;
       }
     }
     #messageList{
-      background-color: black;
+      background-color: $backgroundColor;
       height: 80%;
       padding: {
         top: 20px;
@@ -236,5 +334,14 @@
       &:focus-visible{
         outline-width: 0;
       }
+    }
+    #container > .hidden{
+      width: 0%;
+    }
+    .select{
+      background-color: rgb(87, 87, 80);
+    }
+    .people:hover{
+      border: 1px solid white;
     }
   </style>
