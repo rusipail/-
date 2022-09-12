@@ -83,7 +83,7 @@
   
   :global(body) {
     margin: 0;
-    background-color: $color;
+    background-color: rgb(37, 36, 36);
     overflow: hidden;
   }
 </style>

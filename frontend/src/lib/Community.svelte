@@ -266,7 +266,7 @@
     <style lang="scss">
       @import url('https://fonts.googleapis.com/css2?family=Gentium+Book+Plus&family=Lato:wght@300&family=Roboto:ital,wght@1,100&display=swap');
       $size: 24px;
-      $backgroundColor:rgb(37, 36, 36);
+      $backgroundColor:rgb(27, 26, 26);
       $color:rgb(208, 188, 255);
       $font: 'Lato', sans-serif;
       
@@ -304,11 +304,12 @@
       border-radius: 15px;
       .post{
         background-color: $color;
+        border-radius: 15px;
         margin: {
           top: 30px;
         }
         width: 100%;
-        height: 100%;
+        height: 90%;
         .header{
           width: 100%;
           background-color: $backgroundColor;
@@ -403,7 +404,7 @@
   #custombar{
     width: 100%;
     height: 70px;
-    border: 1px solid $backgroundColor;
+    border: 1px solid gray;
     margin-top: 10px;
     border-radius: 15px;
     background-color: $backgroundColor;

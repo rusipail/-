@@ -16,7 +16,6 @@
   // export let hash:Hash;
   const classes = ["0", "1", "2", "3", "4", "5", "6"]
   const days = ["0", "1", "2", "3", "4"]
-  let date = '';
   type Config = {
     day: "월" | "화" | "수" | "목" | "금",
     class: string[]
@@ -45,24 +44,28 @@
     ]
   </script>
   <main>
-    <!-- <div id="scheduleContainer">
-      <div id="dateContainer">
-        {#each date as d}
-          <div id={ d } class="date"></div>
-        {/each}
-      </div>
-      <div id="classContainer">
-        {#each classContainer as c}
-          <div id={ c } class="classContainer">
-            {#each classes as i}
-              <div class={ i }></div>
+    <!-- <div id="scheduleContainer"> -->
+      <table id="scheduleContainer">
+        <tr>
+          <th class="days c0"></th>
+          {#each days as day}
+            <th class="days c{Number(day) + 1} title">{configs[day].day}요일</th>
+          {/each}
+        </tr>
+        {#each classes as classes}
+          <tr class="">
+            <th class="days classes {classes !== "6" ? "underBorder" : ""} title">
+              {Number(classes) + 1}교시
+            </th>
+            {#each days as day}
+              <td class="days {classes !== "6" ? "underBorder" : ""} subject">
+                {configs[day].class[classes]}
+              </td>
             {/each}
-          </div>
+          </tr>
         {/each}
-      </div>
-    </div> -->
-    <div id="scheduleContainer">
-      <div id="classContainer">
+      </table>
+      <!-- <div id="classContainer">
         <div id="none"></div>
         {#each classes as c}
           <div id="c{Number(c) + 1}">{(Number(c) + 1)}교시</div>
@@ -74,11 +77,6 @@
             <div class="date">{ config.day }</div>
             {#each config.class as _class}
               <div class={`${_class === '' ? '' : 'classes'}`}>
-                <!-- {#if config[f].class[d] == undefined}
-                  {}
-                  {:else}
-                  {config[f].class[d]}
-                {/if} -->
                 {
                   _class
                 }
@@ -86,20 +84,36 @@
             {/each}
           </div>
         {/each}
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
+    
   </main>
   <style lang="scss">
     $backgroundColor: rgb(28, 27, 31);
     $color: rgb(208, 188, 255);
+    .subject{
+      font-size: 18px;
+    }
+    .underBorder{
+      border-bottom: 1px dotted black;
+    }
+    .title{
+      font-size: 22px;
+    }
+    .days{
+      text-align: center;
+      width: calc(100% / 6);
+      border-collapse: collapse;
+    }
     .classes{
-      background-color: $color;
-      height: calc(100% / 8 - 30px);
-      border-radius: 10px;
-      margin: {
-        top: 18%;
-        bottom: 18%;
-      };
+      // background-color: $color;
+      // height: calc(100% / 8 - 30px);
+      // border-radius: 10px;
+      // margin: {
+      //   top: 18%;
+      //   bottom: 18%;
+      // };
+      border-right: 1px solid black;
     }
     #월7, #수7, #금7{
       background-color: transparent;
@@ -125,8 +139,9 @@
       width: 70%;
       margin: auto;
       background-color: white;
-      height: 85%;
-      display: flex;
+      height: 80%;
+      margin-top: 5%;
+      // display: flex;
     }
     #dateContainer{
       width: 100%;
@@ -147,11 +162,9 @@
       };
       border-radius: 10px;
     }
-    #none{
+    .c0{
       color: transparent;
       // background-color: $color;
-      height: calc(100% / 8 - 25px);
-      width: 70%;
       margin: auto;
       margin: {
         top: 10%;
@@ -164,40 +177,8 @@
       // border: 1px solid black;
       // display: flex;
     }
-    #c1, #c2, #c3, #c4, #c5, #c6, #c7{
-      height: calc(100% / 8 - 25px);
-      width: 70%;
-      margin: auto;
-      margin: {
-        top: 10%;
-        bottom: 10%;
-      };
-      text-align: center;
-      background-color: rgb(176, 139, 255);
-      line-height: calc(500% - 16px);
-      // border: 1px solid black;
-      border-radius: 10px;
-      
-      span{
-        width: 80px;
-        height: 60px;
-        background-color: rgb(176, 139, 255);
-        display: block;
-        margin: {
-          top: 10px;
-          left: 10px;
-          right: 10px;
-          bottom: 10px;
-        }
-      }
-      // border: 1px solid black;
+    .c0, .c1, .c2, .c3, .c4, .c5{
+      border-bottom: 1px solid black;
     }
     
-    .classContainer > .class{
-      width: calc(100% / 6 - 20px);
-      margin: {
-        left: 2%;
-        right: 2%;
-      };
-    }
   </style>

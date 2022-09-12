@@ -119,15 +119,15 @@
             안녕
           </span>
           <span class="receptionMessage">
-            안녕!
+            안녕!  
           </span>
         </div>
         <div id="message"></div>
         <div id="inputContainer" class={ peoplestate ? "" : "open"}>
           <div id="input" >
-            <textarea name="messageInput" id="messageInput" cols="30" rows="1" on:keypress={ check }></textarea>
+            <!-- <textarea name="messageInput" id="messageInput" cols="30" rows="1" on:keypress={ check }></textarea> -->
             <!-- <div contenteditable="true" id="messageInput" on:input={ check } ></div> -->
-            <!-- <input type="text" id="messageInput" on:keypress={ check } bind:value={ messageInput } placeholder="메세지를 입력하세요."> -->
+            <input type="text" id="messageInput" on:keypress={ check } bind:value={ messageInput } placeholder="메세지를 입력하세요." maxlength="98">
           </div>
         </div>
       </div>
@@ -327,6 +327,7 @@
       };
     }
     #messageInput{
+      max-width: 98%;
       width: 98%;
       background-color: $color;
       border: 0px;
