@@ -139,13 +139,6 @@
                       size="1.8x" 
                     />
                   </span>
-                  <span class="reaction">
-                    <Fa
-                      class="fa"
-                      icon={ faShare }
-                      size="1.8x"
-                    />
-                  </span>
                 </div>
                 <div class="likes">
                   <strong>
@@ -438,36 +431,4 @@
       background: rgba(33, 122, 244, .1);  /*스크롤바 뒷 배경 색상*/
     }
   }
-  .scrollYes{
-    overflow-y: scroll;
-  }
-  .scrollYes::-webkit-scrollbar {
-    width: 10px;
-  }
-  //스크롤 바 가장 큰 부분
-
-
-  // .scrollYes::-webkit-scrollbar-thumb{
-  //   width: 10px;
-  //   background-color: grey;
-  //   border-radius: 20px;
-  //   margin: {
-  //     right: 3px
-  //   };
-  // }
-  // //스크롤 바 움직이는 부분
-
-  // .scrollYes::-webkit-scrollbar-track{
-  //   width: 10px;
-  //   margin: {
-  //     right: 3px
-  //   };
-  //   border-radius: 20px;
-  //   background-color: rgba(168, 168, 168, 0.3)  
-  // }
-  // //스크롤 바 나머지 부분
-  // #plus{
-  //   width: 60px;
-  //   height: 60px;
-  // }
   </style>

@@ -1,12 +1,12 @@
 <script lang="ts">
     // import Hamburger from '../assets/hamburger.svg'
-    import assets from '../assets'
+    import assets from '../../assets'
     import Fa from "svelte-fa/src/fa.svelte";
     import {
       faBars,
       faPowerOff
     } from "@fortawesome/free-solid-svg-icons/index.es";
-    import type { Hash } from "./type";
+    import type { Hash } from "../type";
     export let on;
     export let hash: string;
     export let selectedUser;

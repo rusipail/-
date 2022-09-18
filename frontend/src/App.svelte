@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import Message from "./lib/Message.svelte";
+  import Message from "./lib/message/Message.svelte";
   import Community from "./lib/Community.svelte";
   import Schedule from "./lib/Schedule.svelte";
-  import Menubar from "./lib/Menubar.svelte";
-  import Sidebar from "./lib/Sidebar.svelte";
+  import Menubar from "./lib/common/Menubar.svelte";
+  import Sidebar from "./lib/common/Sidebar.svelte";
   import { hashArr } from './lib/type';
   import type { Hash } from "./lib/type";
   let on:boolean = false;
@@ -40,7 +40,7 @@
     <Menubar bind:on bind:hash bind:selectedUser/>
     <div id="body" class="temp">
       <Sidebar bind:on bind:hash bind:selectedUser/>
-      {#if hash === "#message"}
+      {#if hash && hash.includes("#message")}
         <Message bind:hash bind:selectedUser/>
       {:else if hash === "#schedule"}
         <Schedule/>  
@@ -71,7 +71,6 @@
   }
 
   .temp {
-    padding-top: 10px;
     margin-top: 80px;
   }
   
