@@ -1,28 +1,23 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    import type { Hash } from "./type";
     export let on:boolean;
     export let hash:string;
     export let selectedUser;
     let selectedHash = 'community';
+
     const sidebarClick = e =>{
       if(e.target.classList.contains("option")){
         if(e.target.innerHTML === "community"){
           hash = "#community";
           selectedHash = 'community'
-          on = false
-          selectedUser = null;
         } else if(e.target.innerHTML === "message"){
           hash = "#message";
           selectedHash = 'message'
-          on = false
-          selectedUser = null;
         } else if(e.target.innerHTML === "schedule"){
           hash = "#schedule";
           selectedHash = 'schedule'
-          on = false
-          selectedUser = null;
         }
+        on = false
+        selectedUser = null;
       }
     }
   </script>
@@ -45,17 +40,14 @@
     $color: rgb(208, 188, 255);
     $size: 24px;
     #sidebar {
-      left: 0;
-      // transform: translateX(-100%);
-      height: 100vh;
+      width: 200px;
       transition: all 0.3s;
       background-color: $backgroundColor;
       position: fixed;
       top: 80px;
-      left: -100%;
-      display: inline-block;
+      bottom: 0;
+      transform: translateX(-200px);
       z-index: 3;
-      // box-sizing: content-box;
       .option {
         cursor: pointer;
         box-sizing: border-box;
@@ -64,33 +56,18 @@
         font-size: 24px;
         transition: all 0.3s;
         width: calc(100%);
-        line-height: calc(380% - 24px);
-        text-align: center;
-        height: 12%;
-        padding: {
-          top: 20px;
-          left: 20px;
-          right: 20px;
-          bottom: 20px;
-        };
-        .select {
-          border: 1px solid white;
-          z-index: 3;
-        }
+        padding: 30px 10px;
       }
     }
     #sidebar.open{
-      // transform: translateX(0%);
-      left: 0;
-      transition: all 0.3s;
+      transform: translateX(0);
     }
     .select{
-      background-color: rgb(87, 87, 80);
-      width: calc(100% - 2px);
-      height: calc(12% - 2px);
+      background-color: rgba(40, 40, 40, .5);
+      color: $color !important;
     }
     .option:hover{
       opacity: 0.5;
-      background-color: rgb(87, 87, 80);
+      background-color: rgba(40, 40, 40, .5);
     }
   </style>

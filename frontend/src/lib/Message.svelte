@@ -215,7 +215,6 @@
     }
     .myData{
       display: flex;
-      text-align: right;
     }
     #peopleCloseButton{
       width: 20px;
@@ -251,7 +250,7 @@
     }
     .myMessage{
       display: flex;
-      float: right;
+      margin-left: auto;
       bottom: 10%;
       background-color: $color;
       border-radius: 20px;
@@ -331,7 +330,7 @@
       }
     }
     #messageToolContainer{
-      width: 82%;
+      width: 81%;
       background-color: rgb(40, 40, 40);
     }
     #messageToolContainer.open{

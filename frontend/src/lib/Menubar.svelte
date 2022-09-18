@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    import { fade } from "svelte/transition";
     // import Hamburger from '../assets/hamburger.svg'
+    import assets from '../assets'
     import Fa from "svelte-fa/src/fa.svelte";
     import {
       faBars,
@@ -18,19 +17,15 @@
     const profileClick = () =>{
       profile = !profile;
     }
-    const show = () => {
-      on = !on;
-    };
-  
   </script>
-  <main>
+  <div>
     <div id="menubar" style="
       height: 80px;
       width: 100vw;
       background-color: rgb(28,27,31);
       display: flex;
     ">
-      <div id="menu" on:click={show} style="
+      <div id="menu" on:click={() => {on = !on}} style="
       z-index: 3;
       padding: 15px;
       width: 30px;
@@ -67,34 +62,34 @@
           width:100px;"
           >
           <circle
-            cx="12.004"
-            cy="12.004"
-            fill="none"
-            r="10.5"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-miterlimit="10"
-            stroke-width="2"
+          cx="12.004"
+          cy="12.004"
+          fill="none"
+          r="10.5"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-miterlimit="10"
+          stroke-width="2"
           />
           <path
-            d="M18.793 20.014a6.08 6.08 0 00-1.778-2.447 3.991 3.991 0 00-2.386-.791H9.38a3.994 3.994 0 00-2.386.791 6.09 6.09 0 00-1.779 2.447"
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-miterlimit="10"
-            stroke-width="2"
+          d="M18.793 20.014a6.08 6.08 0 00-1.778-2.447 3.991 3.991 0 00-2.386-.791H9.38a3.994 3.994 0 00-2.386.791 6.09 6.09 0 00-1.779 2.447"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-miterlimit="10"
+          stroke-width="2"
           />
           <circle
-            cx="12.006"
-            cy="9.718"
-            fill="none"
-            r="4.109"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-miterlimit="10" 
-            stroke-width="2"
+          cx="12.006"
+          cy="9.718"
+          fill="none"
+          r="4.109"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-miterlimit="10" 
+          stroke-width="2"
           />
-        </svg>
+      </svg>
         <div id="username" style="color:white; text-align:center;">username</div>
       </div>
     </div>
@@ -108,23 +103,20 @@
         logout
       </div>
     </div>
-  </main>
+  </div>
   <style lang="scss">
     $color:rgb(208, 188, 255);
     $backgroundColor: rgb(28, 27, 31);
     $size: 24px;
     #menubar {
       height: 80px;
-      width: 100vw;
       z-index: 2;
       background-color: $backgroundColor;
       display: flex;
-      position: relative;
-      // #icon {
-      //   position: relative;
-      //   top: 25px;
-      //   left: 25px;
-      // }
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
       #currentPage {
         flex: auto;
         color: white;

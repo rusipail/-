@@ -38,7 +38,7 @@
 <main>
   <div id="container">
     <Menubar bind:on bind:hash bind:selectedUser/>
-    <div id="body">
+    <div id="body" class="temp">
       <Sidebar bind:on bind:hash bind:selectedUser/>
       {#if hash === "#message"}
         <Message bind:hash bind:selectedUser/>
@@ -58,10 +58,6 @@
   $backgroundColor: rgb(28, 27, 31);
   $color: rgb(208, 188, 255);
   $size: 24px;
-  #body {
-    height: 100vh;
-    overflow: scroll;
-  } 
   
   .blind {
     display: inline-block;
@@ -73,17 +69,14 @@
   .blind.hidden {
     display: none;
   }
-  
-  #container {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    
+
+  .temp {
+    padding-top: 10px;
+    margin-top: 80px;
   }
   
   :global(body) {
     margin: 0;
     background-color: rgb(37, 36, 36);
-    overflow: hidden;
   }
 </style>
