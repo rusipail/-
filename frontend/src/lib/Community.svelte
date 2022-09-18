@@ -3,8 +3,9 @@
     import Fa from 'svelte-fa/src/fa.svelte'
     import { faCaretDown, faBars, faHeart, faHeartCircleExclamation, faComment, faShare, faPlus, faCircleXmark} from '@fortawesome/free-solid-svg-icons/index.es'
     import { each } from 'svelte/internal';
-    import Troll from "../assets/troll.png";
-    import QuestionMark from "../assets/Question_Mark.svg"
+    import CSS from "../assets/CSS.svg"
+    import HTML from "../assets/HTML.png"
+    import test from "../assets/CSS.svg"
     export let hash:string;
     export let upload:boolean;
 
@@ -75,78 +76,78 @@
       user: 'leejuan',
       like: 10,
       title: '제목제목',
-      image: Troll,
+      image: CSS,
       comment: [
         {
           username: "dlwndks",
-          comment: '어쩌라고'
+          comment: 'HELLO'
         },
         {
           username: "leejuan",
-          comment: '응 아니야'
+          comment: 'HI'
         },
         {
           username: "이주안",
-          comment: '오히려'
+          comment: 'leejuan'
         },
         {
           username: "2주안",
-          comment: '좋아'
+          comment: 'I like it'
         },
         {
           username: "dlwndks",
-          comment: '어쩌라고'
+          comment: 'CSS'
         },
         {
           username: "leejuan",
-          comment: '응 아니야'
+          comment: 'HTML'
         },
         {
           username: "이주안",
-          comment: '오히려'
+          comment: '와우'
         },
         {
           username: "2주안",
-          comment: '좋아'
+          comment: 'WOW'
         },
         {
           username: "dlwndks",
-          comment: '어쩌라고'
+          comment: 'OMG'
         },
         {
           username: "leejuan",
-          comment: '응 아니야'
+          comment: 'comment'
         },
         {
           username: "이주안",
-          comment: '오히려'
+          comment: 'Korea'
         },
         {
           username: "2주안",
-          comment: '좋아'
+          comment: 'spiderman'
         },
         {
           username: "dlwndks",
-          comment: '어쩌라고'
+          comment: 'superman'
         },
         {
           username: "leejuan",
-          comment: '응 아니야'
+          comment: 'superhero lending~!'
         },
         {
           username: "이주안",
-          comment: '오히려'
+          comment: 'great'
         },
         {
           username: "2주안",
-          comment: '좋아'
+          comment: 'good'
         }
       ]
     }, {
       user: '2주in',
       like: 10,
       title: '제목입니다~',
-      image: QuestionMark,
+      image: HTML,
       comment: [
         {
           username: "lee주in",
@@ -157,7 +158,19 @@
           comment: "뭘까"
         }
       ]
-    }]
+    },{
+      user: 'testbot',
+      like: 10,
+      title: "test입니다",
+      image: test,
+      comment: [
+        {
+          username: "testbot",
+          comment: "test"
+        }
+      ]
+    }
+  ]
     //
   
   </script>
@@ -216,7 +229,7 @@
             </div>
           </div>
           <div class="content">
-            <img id="img" src={d.image} alt="">
+            <img class="img" src={d.image} alt="">
           </div>
           <div class="headline"> 
             <div class="comment">
@@ -284,6 +297,9 @@
         right: 10px;
       };
     }
+    .reaction:hover{
+      cursor: pointer;
+    }
     .texts{
       padding: {
         top: 10px;
@@ -309,7 +325,7 @@
           top: 30px;
         }
         width: 100%;
-        height: 90%;
+        height: 756px;
         .header{
           width: 100%;
           background-color: $backgroundColor;
@@ -381,6 +397,7 @@
           }
           height: 500px;
           text-align: center;
+          margin: auto;
         }
         .commentBox{
           background-color: $backgroundColor;
@@ -415,6 +432,7 @@
     border: 1px solid $backgroundColor;
     border-radius: 100%;
     justify-content: center;
+    cursor: pointer;
     padding: {
       left: 3px;
       bottom: 3px;
@@ -422,6 +440,13 @@
     
     margin: auto;
     background-color: $color;
+  }
+  .img{
+    width: auto;
+    height: auto;
+    margin: auto;
+    max-width: 800px;
+    max-height: 500px;
   }
   #upload{
     width: 600px;
@@ -453,6 +478,7 @@
       font-size: 24px;
     }
     #uploadClose{
+      cursor: pointer;
       position: relative;
       left: 30%;
     }
@@ -482,6 +508,7 @@
         display: block;
         width: 100%;
         height: 100%;
+        cursor: pointer;
       }
     }
     #fileUploader.imageInput{
@@ -489,10 +516,12 @@
       height: 40%;
     }
     #imgUploadText{
+      cursor:pointer;
       height: 10%;
     }
   }
   #uploadingButton{
+    cursor: pointer;
     width: 100%;
     color: white;
     text-align: center;

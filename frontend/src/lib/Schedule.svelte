@@ -103,16 +103,11 @@
     .days{
       text-align: center;
       width: calc(100% / 6);
-      border-collapse: collapse;
+      // border-collapse: collapse;
+      box-sizing: border-box;
     }
     .classes{
-      // background-color: $color;
-      // height: calc(100% / 8 - 30px);
-      // border-radius: 10px;
-      // margin: {
-      //   top: 18%;
-      //   bottom: 18%;
-      // };
+      // border-top: 1px solid black;
       border-right: 1px solid black;
     }
     #월7, #수7, #금7{
@@ -136,6 +131,7 @@
       
     }
     #scheduleContainer{
+      border-collapse: collapse;
       width: 70%;
       margin: auto;
       background-color: white;

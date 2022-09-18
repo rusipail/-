@@ -174,5 +174,6 @@
       padding: 7px;
       color: red;
       text-align: center;
+      cursor: pointer;
     }
   </style>

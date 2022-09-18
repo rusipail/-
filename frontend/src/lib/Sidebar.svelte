@@ -55,15 +55,18 @@
       left: -100%;
       display: inline-block;
       z-index: 3;
+      // box-sizing: content-box;
       .option {
+        cursor: pointer;
+        box-sizing: border-box;
         z-index: 3;
         color: white;
         font-size: 24px;
         transition: all 0.3s;
-        width: calc(100% - 40px);
+        width: calc(100%);
         line-height: calc(380% - 24px);
         text-align: center;
-        height: 8%;
+        height: 12%;
         padding: {
           top: 20px;
           left: 20px;
@@ -83,8 +86,11 @@
     }
     .select{
       background-color: rgb(87, 87, 80);
+      width: calc(100% - 2px);
+      height: calc(12% - 2px);
     }
     .option:hover{
-      border: 1px solid white;
+      opacity: 0.5;
+      background-color: rgb(87, 87, 80);
     }
   </style>

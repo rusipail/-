@@ -5,9 +5,9 @@
     import {
       faPlus, faChevronLeft, faChevronRight
     } from "@fortawesome/free-solid-svg-icons/index.es";
-    import troll from "../assets/troll.png"
+    import HTML from "../assets/HTML.png"
     import QuestionMark from "../assets/Question_Mark.svg"
-    import basic from "../assets/기본프사.jpg"
+    import CSS from "../assets/CSS.svg"
     export let hash:string;
     export let selectedUser;
     let memory = '';
@@ -54,19 +54,55 @@
     }
     //============mock data
     const mockData = [{
-      profile: troll,
+      profile: HTML,
       recipient: '방준현',
       lastMessage: 'dlwndks',
+      Messages: [
+        {
+          who:"recipient",
+          message:"hello",
+          time: '오후 12시 40분',
+        },
+        {
+          who:"me",
+          message:"hi",
+          time: '오후 12시 38분',
+        }
+      ]
     },
     {
       profile: QuestionMark,
       recipient: '변동윤',
-      lastMessage: '변동윤 대머리',
+      lastMessage: '동하~',
+      Messages: [
+        {
+          who:"recipient",
+          message:"hello",
+          time: '오후 12시 40분',
+        },
+        {
+          who:"me",
+          message:"hi",
+          time: '오후 12시 38분',
+        }
+      ]
     },
     {
-      QuestionMark: basic,
+      profile: CSS,
       recipient: '한결쌤',
       lastMessage: '쌤 이거 모르겠어요',
+      Messages: [
+        {
+          who:"recipient",
+          message:"hello",
+          time: '오후 12시 40분',
+        },
+        {
+          who:"me",
+          message:"hi",
+          time: '오후 12시 38분',
+        }
+      ]
     }
   ]
   </script>
@@ -113,21 +149,39 @@
         </div>
       </div>
       <div id="messageToolContainer" class={ peoplestate ? "" : "open"}>
-        <div id="messageContainer">
+        <div id="message">
+          {#each mockData as data}
+            {#if data.recipient === data.recipient}
+              {#each data.Messages as messages}
+                {#if messages.who === "recipient"}
+                <div class="receptionData">
+                  <span class="receptionMessage">
+                    {messages.message}
+                  </span>
+                  <span class="receptionTime">
+                    {messages.time}
+                  </span>
+                </div>
+                {:else if messages.who === "me"}
+                <div class="myData">
+                  <span class="myTime">
+                    {messages.time}
+                  </span>
+                  <span class="myMessage">
+                    {messages.message}
+                  </span>
+                </div>
+                {/if}
+              {/each}
+            {/if}
+          {/each}
           
-          <span class="myMessage">
-            안녕
-          </span>
-          <span class="receptionMessage">
-            안녕!  
-          </span>
         </div>
-        <div id="message"></div>
         <div id="inputContainer" class={ peoplestate ? "" : "open"}>
           <div id="input" >
             <!-- <textarea name="messageInput" id="messageInput" cols="30" rows="1" on:keypress={ check }></textarea> -->
             <!-- <div contenteditable="true" id="messageInput" on:input={ check } ></div> -->
-            <input type="text" id="messageInput" on:keypress={ check } bind:value={ messageInput } placeholder="메세지를 입력하세요." maxlength="98">
+            <input type="text" id="messageInput" on:keypress={ check } bind:value={ messageInput } placeholder="메세지를 입력하세요.">
           </div>
         </div>
       </div>
@@ -141,11 +195,34 @@
     $color: rgb(208, 188, 255);
     $color2: rgb(176, 139, 255);
     $size: 17px;
+    #messageContainer{
+      height: 90%;
+    }
+    .receptionTime, .myTime{
+      display: none;
+      color: white;
+      font-size: 10px;
+      line-height: 3.4;
+    }
+    .receptionMessage:hover + .receptionTime{
+      display: inline;
+    }
+    .myMessage:hover + .myTime{
+      display: inline;
+    }
+    .receptionData{
+      display: flex;
+    }
+    .myData{
+      display: flex;
+      text-align: right;
+    }
     #peopleCloseButton{
-      width: 40px;
+      width: 20px;
       height: 50px;
       position: relative;
       left: calc(100% - 25px);
+      cursor: pointer;
     }
     #peopleOpenButton{
       z-index: -1;
@@ -154,6 +231,7 @@
       width: 50px;
       height: 40px;
       left: 0px;
+      cursor: pointer;
       text-align: center;
       padding: {
         top: 8px
@@ -172,8 +250,8 @@
       };
     }
     .myMessage{
-      position: absolute;
-      right: 20px;
+      display: flex;
+      float: right;
       bottom: 10%;
       background-color: $color;
       border-radius: 20px;
@@ -183,10 +261,9 @@
         bottom: 5px;
         right: 10px;
       };
+      font-size: 18px;
     }
     .receptionMessage{
-      position: absolute;
-      bottom: calc(11%);
       background-color: $color2;
       border-radius: 20px;
       padding: {
@@ -195,10 +272,12 @@
         bottom: 5px;
         right: 10px;
       };
+      font-size: 18px;
     }
     .img{
-      width: 40px;
-      height: 40px;
+      width: auto;
+      height: auto;
+      max-width: 45px;
     }
     #findingPeople{
       width: calc(100% - 5px);
@@ -228,6 +307,7 @@
       width: calc(100% - 1px);
       display: flex;
       box-sizing: border-box;
+      cursor: pointer;
       // border: {
       //   top: 1px solid white;
       //   bottom: 1px solid white;
@@ -327,7 +407,7 @@
       };
     }
     #messageInput{
-      max-width: 98%;
+      // max-width: 98%;
       width: 98%;
       background-color: $color;
       border: 0px;
@@ -337,12 +417,12 @@
       }
     }
     #container > .hidden{
-      width: 0%;
+      width: 0%;  
     }
     .select{
       background-color: rgb(87, 87, 80);
     }
     .people:hover{
-      border: 1px solid white;
+      background-color: rgb(47, 47, 42);
     }
   </style>
