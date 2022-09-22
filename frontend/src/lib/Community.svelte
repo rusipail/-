@@ -19,7 +19,6 @@
     let likes = 0;
     $:{
       if(flag) location.hash = hash;
-      console.log(wrapper)
       if(con) console.log(1)
     }
     

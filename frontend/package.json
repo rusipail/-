@@ -23,6 +23,7 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "fontawesome-svelte": "^2.0.1",
+    "socket.io-client": "^4.5.2",
     "svelte-fa": "^3.0.2"
   }
 }

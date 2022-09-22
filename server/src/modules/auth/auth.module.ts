@@ -8,12 +8,10 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { JwtModule } from "@nestjs/jwt";
 import { JwtStrategy } from '../jwt/jwt.strategy'
 import { config } from '../../../config'
-import { UserService } from '../teacher.user/user.service'
-import { Profile, User } from '@/teacher.entity'
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([User, Profile]),
+        TypeOrmModule.forFeature([]),
         JwtModule.register({
             secret: config.JWT_SECRET,
             signOptions: { expiresIn: '30d' }
@@ -25,7 +23,6 @@ import { Profile, User } from '@/teacher.entity'
         AuthService,
         JwtStrategy,
         GoogleStrategy,
-        UserService
     ],
     exports: [],
 })

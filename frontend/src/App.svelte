@@ -8,6 +8,7 @@
   import Sidebar from "./lib/common/Sidebar.svelte";
   import { hashArr } from './lib/type';
   import type { Hash } from "./lib/type";
+
   let on:boolean = false;
   let hash: string;
   let flag = false;

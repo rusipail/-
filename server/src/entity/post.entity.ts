@@ -1,5 +1,5 @@
 import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm'
-import {User} from './user.entity'
+import {UserEntity} from './user.entity'
 import { Comment } from './comment.entity'
 
 @Entity()
@@ -7,9 +7,9 @@ export class Post {
     @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @ManyToOne(() => User, user => user.id)
+    @ManyToOne(() => UserEntity, user => user.id)
     @JoinColumn()
-    author: User
+    author: UserEntity
     
     @Column()
     title:string
@@ -19,8 +19,4 @@ export class Post {
 
     @CreateDateColumn()
     registered_at:Date
-
-    @OneToMany( () => Comment, (comment) => comment.post_id)
-    @JoinColumn()
-    comments: Comment[]
 }

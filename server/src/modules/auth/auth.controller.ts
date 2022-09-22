@@ -4,11 +4,13 @@ import { AuthService } from './auth.service'
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from '../jwt/jwt-auth.guard'
 import { config } from '../../../config'
+import { UserService } from "../user/user.service";
 
 @Controller('oauth')
 export class AuthController {
     constructor(
-        private authService: AuthService
+        private authService: AuthService,
+        private userService: UserService
     ) { }
 
     @Get('login')
@@ -23,6 +25,8 @@ export class AuthController {
     ) {
         try {
             const token = await this.authService.createToken(req.user)
+            console.log(req.user)
+            await this.userService.saveUser(req.user)
             res.header('Authorization', `Bearer ${token}`)
             res.redirect(`${config.BASE_URL}?token=${token}`)
         } catch (err) {
@@ -34,14 +38,14 @@ export class AuthController {
     // 로그인이 필요한 resource엔 @UseGuards(JwtAuthGuard) 만 붙여주면 됩니다.
     @Get('/check')
     @UseGuards(JwtAuthGuard)
-    foo(
+    async foo(
         @Req() req: Request
     ) {
-        // console.log(req.user)
+        const id = await this.authService.getUserId(req.user.email);
         return {
             success: true,
             message: '',
-            data: req.user
+            data: {...req.user, id: id}
         }
     }
 }

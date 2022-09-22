@@ -2,6 +2,9 @@
     import { onMount } from 'svelte';
     import type { Hash } from '../type';
     import {messageMockData} from '../../mock'
+
+    import TestSocket from './Test.svelte'
+
     export let hash:string;
     export let selectedUser;
 
@@ -114,6 +117,11 @@
         </div>
       </div>
       <div id="setting"></div>
+    </div>
+
+    <div>
+      <TestSocket />
+      <h1>HI</h1>
     </div>
   </main>
   

@@ -20,6 +20,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   async validate (accessToken: string, refreshToken: string, profile: Profile): Promise<Omit<UserDetail, 'id'>> {
     const { _json: {email, picture, name } } = profile
     const user = {email, picture, name}
+    console.log(user);
     return user
   }
 }
