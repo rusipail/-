@@ -1,279 +1,292 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import Fa from 'svelte-fa/src/fa.svelte'
-    import { faHeart, faComment, faShare, faPlus, faCircleXmark} from '@fortawesome/free-solid-svg-icons/index.es'
-    import {mockData} from '../mock'
+  import { onMount } from "svelte";
+  import Fa from "svelte-fa/src/fa.svelte";
+  import {
+    faHeart,
+    faComment,
+    faPlus,
+    faCircleXmark,
+  } from "@fortawesome/free-solid-svg-icons/index.es";
+  import { mockData } from "../mock";
 
-    export let hash:string;
-    export let upload:boolean;
+  export let hash: string;
+  export let upload: boolean;
 
-    let imageUrl = '';
-    let imageInput = false;
-    let flag = false;
-    let wrapper:string = '';
-    let subject:string = 'subject';
-    let image = '';
-    let con = false;
-    let commentInput = '';
-    let memory = '';
-    let likes = 0;
-    $:{
-      if(flag) location.hash = hash;
-      if(con) console.log(1)
+  let imageUrl = "";
+  let imageInput = false;
+  let flag = false;
+  let wrapper: string = "";
+  let subject: string = "subject";
+  let image = "";
+  let con = false;
+  let commentInput = "";
+  let memory = "";
+  let likes = 0;
+  $: {
+    if (flag) location.hash = hash;
+    console.log(wrapper);
+    if (con) console.log(1);
+  }
+
+  hash = location.hash;
+  onMount(() => (flag = true));
+
+  const toggleUpload = () => {
+    upload = !upload;
+    if (upload == false) {
+      wrapper = "";
+      console.log(imageUrl);
+      imageUrl = null;
     }
-    
-    hash = location.hash;
-    onMount(() => flag = true);
+  };
 
-    const toggleUpload = () => {
-      upload = !upload
-      if(upload == false){
-        wrapper = '';
-        console.log(imageUrl)
-        imageUrl = null;
-      }
+  const uploading = () => {
+    subject = wrapper;
+    image = imageUrl;
+    toggleUpload();
+  };
+
+  const check = (event) => {
+    if (event.key === "Enter") {
+      memory = commentInput;
+      commentInput = "";
+      console.log(memory);
+      memory = "";
     }
+  };
 
-    const uploading = () =>{
-      subject = wrapper;
-      image = imageUrl;
-      toggleUpload()
-    }
+  const inputImages = (e: Event) => {
+    const inputTag = e.target as HTMLInputElement;
+    const files = inputTag.files;
+    console.log(files);
+    if (!files.length) return;
 
-    const check = (event) =>{
-      if(event.key === "Enter"){
-        memory = commentInput;
-        commentInput = '';
-        console.log(memory);
-        memory = '';
-      }
-    }
+    const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+    reader.onload = (event) => {
+      console.log(event.target.result);
+      imageUrl = event.target.result as string;
+      imageInput = !imageInput;
+    };
+  };
+</script>
 
-    const inputImages = (e: Event) =>  {
-      const inputTag = e.target as HTMLInputElement
-      const files = inputTag.files
-      console.log(files)
-      if(!files.length) return
-
-      const reader = new FileReader()
-      reader.readAsDataURL(files[0])
-      reader.onload = (event) => {
-        console.log(event.target.result)
-        imageUrl = event.target.result as string
-        imageInput = !imageInput;
-      }
-    }
-  </script>
-  <main>
-    <div id="upload" class={upload ? "" : "hidden"}>
-      <div id="uploadContainer">
-        <div id="uploadHeader">게시물 올리기
-          <span id="uploadClose" on:click={toggleUpload}>
-            <Fa
-              icon={ faCircleXmark }
-              color="white"
-              size="1.5x"
-            />
-          </span>
-        </div>
-      </div>
-
-      <!-- modal 창 -->
-      <div id="commentContainer">
-        <div id="commentBox">
-          <input type="string" placeholder="게시글 제목를 입력해주세요" id="post-title" bind:value={ wrapper } autocomplete="off">
-        </div>
-        <div id="imgUpload">
-          <input type="file" id="file" on:input={inputImages}>
-          <label for="file" id="fileUploader" class={imageInput ? "imageInput" : ""}>
-            <div id="imgUploadText">사진/동영상 추가하기</div>
-            <img src={imageUrl} alt="">
-          </label>
-        </div>
-      </div>
-      <div id="uploadingButton" on:click={uploading}>
-        게시하기
+<main>
+  <div id="upload" class={upload ? "" : "hidden"}>
+    <div id="uploadContainer">
+      <div id="uploadHeader">
+        게시물 올리기
+        <span id="uploadClose" on:click={toggleUpload}>
+          <Fa icon={faCircleXmark} color="white" size="1.5x" />
+        </span>
       </div>
     </div>
 
-    <div id="postbar">
-      <div id="custombar">
-        <div id="uploading" on:click={toggleUpload}>
-          <Fa
-            icon={ faPlus }
-            color="white"
-            size="4x"
-            id="plus"
-          />
-        </div>
+    <!-- modal 창 -->
+    <div id="commentContainer">
+      <div id="commentBox">
+        <input
+          type="string"
+          placeholder="게시글 제목를 입력해주세요"
+          id="post-title"
+          bind:value={wrapper}
+          autocomplete="off"
+        />
       </div>
+      <div id="imgUpload">
+        <input type="file" id="file" on:input={inputImages} />
+        <label
+          for="file"
+          id="fileUploader"
+          class={imageInput ? "imageInput" : ""}
+        >
+          <div id="imgUploadText">사진/동영상 추가하기</div>
+          <img src={imageUrl} alt="" />
+        </label>
+      </div>
+    </div>
+    <div id="uploadingButton" on:click={uploading}>게시하기</div>
+  </div>
 
-      <!-- posts -->
-      <div class="posts">
-        {#each mockData as d}
-            <div class="post">
-              <div class="header">
-                <div class="profile" style="backgroundImage: {d.picture}; background-size: contains;"></div>
-                <div class="text">
-                  <div class="subject">{d.user}</div>
-                  <div class="subhead">{d.title}</div>
-                </div>
-              </div>
-              <div class="content">
-                <img class="img" src={d.image} alt="" width="100%" height="100%">
-              </div>
-              <div class="headline"> 
-                <div class="comment">
-                  <span class="reaction">
-                    <Fa 
-                      class="fa"
-                      icon={ faHeart }
-                      size="1.8x"
-                  />
-                  </span>
-                  <span class="reaction">
-                    <Fa
-                      class="fa"
-                      icon={ faComment }
-                      size="1.8x" 
-                    />
-                  </span>
-                </div>
-                <div class="likes">
-                  <strong>
-                    좋아요 {d.like}개 댓글 {d.comment.length}개
-                  </strong>
-                </div>
-              </div>
-              <div class="commentBox">
-                <div class="commentUploadingBox">
-                  {#each d.comment as comment}
-                    <div class="texts"><span><strong>{comment.username}</strong> </span><span>{comment.comment}</span></div>
-                  {/each}
-                </div>
-                <div class="commentInputContainer">
-                  <input type="text" placeholder="댓글을 입력하세요" class="commentInput" on:keypress={check} bind:value={ commentInput }>
-                </div>
-              </div>
+  <div id="postbar">
+    <div id="custombar">
+      <div id="uploading" on:click={toggleUpload}>
+        <Fa icon={faPlus} color="white" size="4x" id="plus" />
+      </div>
+    </div>
+
+    <!-- posts -->
+    <div class="posts">
+      {#each mockData as d}
+        <div class="post">
+          <div class="header">
+            <div
+              class="profile"
+              style="backgroundImage: {d.picture}; background-size: contains;"
+            />
+            <div class="text">
+              <div class="subject">{d.user}</div>
+              <div class="subhead">{d.title}</div>
             </div>
-            {/each}
+          </div>
+          <div class="content">
+            <img class="img" src={d.image} alt="" width="100%" height="100%" />
+          </div>
+          <div class="headline">
+            <div class="comment">
+              <span class="reaction">
+                <Fa class="fa" icon={faHeart} size="1.8x" />
+              </span>
+              <span class="reaction">
+                <Fa class="fa" icon={faComment} size="1.8x" />
+              </span>
+            </div>
+            <div class="likes">
+              <strong>
+                좋아요 {d.like}개 댓글 {d.comment.length}개
+              </strong>
+            </div>
+          </div>
+          <div class="commentBox">
+            <div class="commentUploadingBox">
+              {#each d.comment as comment}
+                <div class="texts">
+                  <span><strong>{comment.username}</strong> </span><span
+                    >{comment.comment}</span
+                  >
+                </div>
+              {/each}
+            </div>
+            <div class="commentInputContainer">
+              <input
+                type="text"
+                placeholder="댓글을 입력하세요"
+                class="commentInput"
+                on:keypress={check}
+                bind:value={commentInput}
+              />
+            </div>
+          </div>
         </div>
-  </main>
-    <style lang="scss">
-      @import url('https://fonts.googleapis.com/css2?family=Gentium+Book+Plus&family=Lato:wght@300&family=Roboto:ital,wght@1,100&display=swap');
-      $size: 24px;
-      $backgroundColor:rgb(27, 26, 26);
-      $color:rgb(208, 188, 255);
-      $font: 'Lato', sans-serif;
-    .reaction{
-      padding: {
-        top: 5px;
-        left: 5px;
-        right: 10px;
-      };
+      {/each}
+    </div>
+  </div>
+</main>
+
+<style lang="scss">
+  @import url("https://fonts.googleapis.com/css2?family=Gentium+Book+Plus&family=Lato:wght@300&family=Roboto:ital,wght@1,100&display=swap");
+  $size: 24px;
+  $backgroundColor: rgb(27, 26, 26);
+  $color: rgb(208, 188, 255);
+  $font: "Lato", sans-serif;
+  .reaction {
+    padding: {
+      top: 5px;
+      left: 5px;
+      right: 10px;
     }
-    .reaction:hover{
-      cursor: pointer;
+  }
+  .reaction:hover {
+    cursor: pointer;
+  }
+  .texts {
+    padding: {
+      top: 10px;
     }
-    .texts{
-      padding: {
-        top: 10px;
-      };
-    }
-    #postbar{
-      max-width: 800px;
-      margin: auto;
-    }
-    .posts{
-      .post{
-        border-radius: 15px 15px 0 0;
-        margin-top: 30px;
-        .header{
-          background-color: $backgroundColor;
-          border-radius: 15px 15px 0px 0px;
-          padding:10px 10px 15px 10px;
-          
+  }
+  #postbar {
+    max-width: 800px;
+    margin: auto;
+  }
+  .posts {
+    .post {
+      border-radius: 15px 15px 0 0;
+      margin-top: 30px;
+      .header {
+        background-color: $backgroundColor;
+        border-radius: 15px 15px 0px 0px;
+        padding: 10px 10px 15px 10px;
+
+        box-sizing: border-box;
+        align-items: center;
+        display: flex;
+        gap: 10px;
+        .profile {
           box-sizing: border-box;
-          align-items: center;
           display: flex;
-          gap:10px;
-          .profile{
-            box-sizing: border-box;
+          justify-content: center;
+          align-items: center;
+          height: 40px;
+          width: 40px;
+          border-radius: 100%;
+          background-color: $color;
+        }
+        .text {
+          width: 80%;
+          .subject {
+            color: white;
+            font-size: large;
+            font: {
+              size: large;
+            }
             display: flex;
+            // justify-content: center;
+            align-items: center;
+          }
+          .subhead {
+            color: white;
+            font-size: small;
             justify-content: center;
             align-items: center;
-            height: 40px;
-            width:40px;
-            border-radius: 100%;
-            background-color: $color;
-          }
-          .text{
-            width: 80%;
-            .subject{
-              color: white;
-              font-size: large;
-              font: {
-                size: large;
-              }
-              display: flex;
-              // justify-content: center;
-              align-items: center;
-              
-            }
-            .subhead{
-              color: white;
-              font-size: small;
-              justify-content: center;
-              align-items: center;
-            }
           }
         }
-        .headline{
-          background-color: darkslategrey;
-          color: white;
-          padding: 10px 0;
-          .comment{
-            padding: 10px 5px;
-          }
-          .likes {
-            padding-left: 10px;
-          }
+      }
+      .headline {
+        background-color: darkslategrey;
+        color: white;
+        padding: 10px 0;
+        .comment {
+          padding: 10px 5px;
         }
-        .content{
-          background-color: white;
-          border: {
-            left: 1px solid $backgroundColor;
-            right: 1px solid $backgroundColor;
-          } 
-          height: 500px;
-          text-align: center;
+        .likes {
+          padding-left: 10px;
         }
-        .commentBox{
-          max-height: 400px;
-          background-color: $backgroundColor;
-          color: white;
-          border-radius: 0px 0px 15px 15px;
-          padding: {
-            left: 10px
-          };
+      }
+      .content {
+        background-color: white;
+        border: {
+          left: 1px solid $backgroundColor;
+          right: 1px solid $backgroundColor;
+        }
+        height: 500px;
+        text-align: center;
+      }
+      .commentBox {
+        max-height: 400px;
+        background-color: $backgroundColor;
+        color: white;
+        border-radius: 0px 0px 15px 15px;
+        padding: {
+          left: 10px;
         }
       }
     }
-  #custombar{
+  }
+  #custombar {
     width: 100%;
     padding: 10px 0;
     border: 1px solid gray;
-    margin-top: 10px;
+    margin-top: 100px;
     border-radius: 15px;
     background-color: $backgroundColor;
-    transition: all .2s;
+    transition: all 0.2s;
 
-    &:hover{
-      opacity: .8;
+    &:hover {
+      opacity: 0.8;
       cursor: pointer;
     }
   }
-  #uploading{
+  #uploading {
     width: 60px;
     height: 60px;
     border: 1px solid $backgroundColor;
@@ -284,18 +297,18 @@
       left: 3px;
       bottom: 3px;
     }
-    
+
     margin: auto;
     background-color: $color;
   }
-  .img{
+  .img {
     width: auto;
     height: auto;
     margin: auto;
     max-width: 800px;
     max-height: 500px;
   }
-  #upload{
+  #upload {
     position: fixed;
     width: 600px;
     height: 600px;
@@ -306,15 +319,15 @@
     background-color: $backgroundColor;
     border-radius: 20px;
   }
-  #upload.hidden{
+  #upload.hidden {
     display: none;
   }
-  #uploadContainer{
+  #uploadContainer {
     width: 100%;
     height: 10%;
     display: flex;
-    
-    #uploadHeader{
+
+    #uploadHeader {
       padding: {
         top: 15px;
       }
@@ -323,16 +336,16 @@
       text-align: center;
       font-size: 24px;
     }
-    #uploadClose{
+    #uploadClose {
       cursor: pointer;
       position: relative;
       left: 30%;
     }
   }
-  #commentContainer{
+  #commentContainer {
     height: 80%;
     border-collapse: collapse;
-    #commentBox{
+    #commentBox {
       color: white;
       width: 98%;
       height: 10%;
@@ -340,16 +353,16 @@
       margin: auto;
       text-align: center;
     }
-    #imgUpload{
+    #imgUpload {
       width: 98%;
       height: 80%;
       border: 1px solid gray;
       margin: auto;
       text-align: center;
-      #file{
+      #file {
         display: none;
       }
-      #fileUploader{
+      #fileUploader {
         color: white;
         display: block;
         width: 100%;
@@ -357,16 +370,16 @@
         cursor: pointer;
       }
     }
-    #fileUploader.imageInput{
+    #fileUploader.imageInput {
       width: 100%;
       height: 40%;
     }
-    #imgUploadText{
-      cursor:pointer;
+    #imgUploadText {
+      cursor: pointer;
       margin-top: 20px;
     }
   }
-  #uploadingButton{
+  #uploadingButton {
     cursor: pointer;
     width: 100%;
     padding: 10px 0;
@@ -375,30 +388,30 @@
     text-align: center;
     background-color: $color;
   }
-  #post-title{
+  #post-title {
     width: 98%;
     height: 90%;
     background-color: $backgroundColor;
     border: 0;
     color: white;
   }
-  #post-title:focus-visible{
-    outline-offset: 0px;;
+  #post-title:focus-visible {
+    outline-offset: 0px;
     outline: 0;
   }
-  #img{
+  #img {
     margin: auto;
     height: 100%;
   }
-  .commentInput{
+  .commentInput {
     background-color: rgb(28, 27, 31);
     color: white;
   }
-  .commentInput:focus-visible{
-    outline-offset: 0px;;
+  .commentInput:focus-visible {
+    outline-offset: 0px;
     outline: 0;
   }
-  .commentInputContainer{
+  .commentInputContainer {
     padding: 10px 0;
     width: 100%;
 
@@ -417,7 +430,7 @@
     overflow: auto;
 
     &::-webkit-scrollbar {
-      width: 8px;  /* 스크롤바의 너비 */
+      width: 8px; /* 스크롤바의 너비 */
     }
 
     &::-webkit-scrollbar-thumb {
@@ -427,7 +440,7 @@
     }
 
     &::-webkit-scrollbar-track {
-      background: rgba(33, 122, 244, .1);  /*스크롤바 뒷 배경 색상*/
+      background: rgba(33, 122, 244, 0.1); /*스크롤바 뒷 배경 색상*/
     }
   }
-  </style>
+</style>

@@ -4,173 +4,165 @@
     import Fa from "svelte-fa/src/fa.svelte";
     import {
       faCaretDown,
-      faSolid,
       faBars,
       faHeart,
       faComment,
       faShare,
       faPowerOff
     } from "@fortawesome/free-solid-svg-icons/index.es";
-  import { claim_space } from "svelte/internal";
-  import type { Hash } from "./type";
+    import { claim_space } from "svelte/internal";
+    import type { Hash } from "./type";
   // export let hash:Hash;
-  const classes = ["0", "1", "2", "3", "4", "5", "6"]
+  const dish = ["0", "1", "2", "3", "4", "5"]
   const days = ["0", "1", "2", "3", "4"]
+  const week = [
+    false,
+    false, 
+    false, 
+    false, 
+    false
+  ]
+  let Mon = false;
+  let Tue = false;
+  let Wed = false;
+  let Thu = false;
+  let Fri = false;
+  const checkingDay = (e) =>{
+    for(let i = 0; i < week.length; i++){
+      week[i] = false
+      if(e.target.innerHTML === `${configs[i].day}`){
+          week[i] = !week[i];
+      }
+    }
+  }
   type Config = {
     day: "월" | "화" | "수" | "목" | "금",
-    class: string[]
+    dishes: string[]
   }
     const configs: Config[] = [
       {
         day: "월",
-        class: ["국어", "수학", "과학", "사회", "중국어", "기가", ""]
+        dishes: ["잡곡밥", "김치", "돈가스", "돈가스 소스", "콩나물", "된장국"]
       },
       {
         day: "화",
-        class: ["수학", "체육", "기가", "과학", "국어", "영어", "역사"]
+        dishes: ["흰쌀밥", "열무김치", "부대찌게", "볶음밥", "파스타", "햄버거"]
       },
       {
         day: "수",
-        class: ["과학", "역사", "국어", "중국어", "수학", "영어", "",]
+        dishes: ["짜장면", "짬뽕", "탕수육", "깐풍기", "깐쇼새우", "단무지"]
       },
       {
         day: "목",
-        class: ["영어", "기가", "과학", "체육", "수학", "국어", "스클"]
+        dishes: ["똠얌꿍", "불고기", "초밥", "마라탕", "피시엔칩스", "딸기"]
       },
       {
         day: "금",
-        class: ["자율", "미술", "미술", "스클", "영어", "사회", ""]
+        dishes: ["복숭아", "버섯탕수육", "하와이안피자", "민트초코스파게티", "비건버거", "귀뚜라미 볶음"]
       }
     ]
   </script>
   <main>
-    <!-- <div id="scheduleContainer"> -->
-      <table id="scheduleContainer">
-        <tr>
-          <th class="days c0"></th>
-          {#each days as day}
-            <th class="days c{Number(day) + 1} title">{configs[day].day}요일</th>
+    <div id="dishesContainer">
+      <div id="title">점심메뉴</div>
+      <table>
+        <tr id="dayManageContainer">
+          {#each configs as data}
+            <td class="day" on:click={ checkingDay }>{data.day}</td>
           {/each}
         </tr>
-        {#each classes as classes}
-          <tr class="">
-            <th class="days classes {classes !== "6" ? "underBorder" : ""} title">
-              {Number(classes) + 1}교시
-            </th>
-            {#each days as day}
-              <td class="days {classes !== "6" ? "underBorder" : ""} subject">
-                {configs[day].class[classes]}
-              </td>
-            {/each}
+        {#each days as dishes}
+          <tr class="dishes{dishes} {week[dishes] ? "" : "dishes"}">
+            <td colspan="5">
+              <div class="weekDishes">
+                {#each dish as i}
+                  <div class="menu">{configs[dishes].dishes[i]}</div>
+                {/each}
+              </div>
+            </td>
           </tr>
         {/each}
       </table>
-      <!-- <div id="classContainer">
-        <div id="none"></div>
-        {#each classes as c}
-          <div id="c{Number(c) + 1}">{(Number(c) + 1)}교시</div>
-        {/each}
-      </div>
-      <div id="dateContainer">
-        {#each configs as config}
-          <div class="configContainer">
-            <div class="date">{ config.day }</div>
-            {#each config.class as _class}
-              <div class={`${_class === '' ? '' : 'classes'}`}>
-                {
-                  _class
-                }
-              </div>
-            {/each}
-          </div>
-        {/each}
-      </div> -->
-    <!-- </div> -->
-    
+    </div>
   </main>
   <style lang="scss">
     $backgroundColor: rgb(28, 27, 31);
     $color: rgb(208, 188, 255);
-    .subject{
-      font-size: 18px;
-    }
-    .underBorder{
-      border-bottom: 1px dotted black;
-    }
-    .title{
-      font-size: 22px;
-    }
-    .days{
+    table{
+      width: 100%;
       text-align: center;
+      border-collapse: collapse;
+    }
+    .weekDishes{
+      display: flex;
+      height: 100%;
+      // padding: {
+      //   top: 200px;
+      //   bottom: 220px;
+      // };
+      border: 1px solid $color;
+    }
+    .menu{
       width: calc(100% / 6);
-      box-sizing: border-box;
-    }
-    .classes{
-      border-right: 1px solid black;
-    }
-    #월7, #수7, #금7{
-      background-color: transparent;
-    }
-    .configContainer{
-      width: calc(100% / 5 - 2px);
-      text-align: center;
-      line-height: calc(500% - 16px);
-      margin: {
-        left: 3%;
-        right: 3%;
+      border: 1px solid $color;
+      padding: {
+        top: 220px;
+        bottom: 220px;
       };
+    }
+    #title{
+      font-size: 30px;
+      text-align: center;
+      padding: {
+        top: 45px;
+        bottom: 45px;
+      };
+    }
+    .dishes{
+      display: none;
     }
     main{
-      height: calc(100vh - 60px);
-      margin: {
-        top: 60px;
-      }
+      height: calc(100vh - 120px);
     }
-    #scheduleContainer{
-      border-collapse: collapse;
-      width: 70%;
-      margin: auto;
-      background-color: white;
-      height: 80%;
-      margin-top: 5%;
-      // display: flex;
-    }
-    #dateContainer{
+    #dayManageContainer{
       width: 100%;
-      // min-width: 500px;
-      height: calc(100%);
-      // border: 1px solid black; 
-      display: flex;
-      // margin: {
-      //   top: 5px;
+      // & + tr {
+      //   td{
+
+      //   }
       // }
     }
-    .date{
-      height: calc(100% / 8 - 25px);
-      background-color: rgb(176, 139, 255);
-      margin: {
-        top: 10%;
-        bottom: 10%;
-      };
-      border-radius: 10px;
+    .dishes0, .dishes1, .dishes2, .dishes3, .dishes4{
+      // padding: {
+      //   top: 30px;
+      //   bottom: 30px;
+      // };
+      width: 100%;
+      height: 480px;
     }
-    .c0{
-      color: transparent;
-      // background-color: $color;
+    .dishes1{
+
+    }
+    .dishes2{
+
+    }
+    .day{
+      font-size: 20px;
+      background-color: $color;
+      width: calc(100% / 5);
+      padding: {
+        top: 31.5px;
+        bottom: 31.5px;
+      };
+      border: 1px solid black;
+    }
+    #dishesContainer{
+      border-collapse: collapse;
+      width: 1400px;
       margin: auto;
-      margin: {
-        top: 10%;
-        bottom: 10%;
-      };
+      margin-top: 120px;
+      background-color: white;
+      height: 700px;
+      border-radius: 8px;
     }
-    #classContainer{
-      width: 20%;
-      height: 100%;
-      // border: 1px solid black;
-      // display: flex;
-    }
-    .c0, .c1, .c2, .c3, .c4, .c5{
-      border-bottom: 1px solid black;
-    }
-    
   </style>

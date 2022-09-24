@@ -15,6 +15,9 @@
         } else if(e.target.innerHTML === "schedule"){
           hash = "#schedule";
           selectedHash = 'schedule'
+        } else if(e.target.innerHTML === "vote"){
+          hash = "#vote"
+          selectedHash = 'vote'
         }
         on = false
         selectedUser = null;
@@ -31,6 +34,9 @@
       </div>
       <div class="option {selectedHash === "schedule" ? "select" : ""}">
         schedule
+      </div>
+      <div class="option {selectedHash === "vote" ? "select" : ""}">
+        vote
       </div>
     </div>
   </main>

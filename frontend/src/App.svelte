@@ -4,6 +4,7 @@
   import Message from "./lib/message/Message.svelte";
   import Community from "./lib/Community.svelte";
   import Schedule from "./lib/Schedule.svelte";
+  import Vote from "./lib/Vote.svelte"; 
   import Menubar from "./lib/common/Menubar.svelte";
   import Sidebar from "./lib/common/Sidebar.svelte";
   import { hashArr } from './lib/type';
@@ -22,15 +23,19 @@
   }
   const hashchange = () => {
     if(!hashArr.includes(location.hash as Hash)) {
+      console.log(hash)
       location.hash = hash;
       return;
     }
+    console.log(hash)
+    console.log(location.hash)
     hash = location.hash as Hash;
   }
   
   onMount(() => (flag = true));
   $: {
     if (flag) location.hash = hash;
+    console.log(hash)
     if(hash == undefined) location.hash = "#community"
   }
 
@@ -47,6 +52,8 @@
         <Schedule/>  
       {:else if hash === "#community"}
         <Community bind:hash bind:upload/>
+      {:else if hash === "#vote"}
+        <Vote bind:hash bind:upload/>
       {/if}
     </div>
   </div>
