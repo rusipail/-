@@ -399,10 +399,10 @@
     outline-offset: 0px;
     outline: 0;
   }
-  #img {
-    margin: auto;
-    height: 100%;
-  }
+  // #img {
+  //   margin: auto;
+  //   height: 100%;
+  // }
   .commentInput {
     background-color: rgb(28, 27, 31);
     color: white;

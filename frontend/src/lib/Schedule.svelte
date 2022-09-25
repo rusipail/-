@@ -140,12 +140,6 @@
       width: 100%;
       height: 480px;
     }
-    .dishes1{
-
-    }
-    .dishes2{
-
-    }
     .day{
       font-size: 20px;
       background-color: $color;
