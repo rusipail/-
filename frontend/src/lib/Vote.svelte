@@ -5,90 +5,113 @@
   } from "@fortawesome/free-solid-svg-icons/index.es";
   import Fa from "svelte-fa/src/fa.svelte";
 
+  interface candidate {
+    number: number;
+  }
+
+  type WhoVote = {
+    idx: number
+    name: string
+  }
+
+  type PostData = {
+    title: string
+    options: string[]
+    voted: WhoVote[]  
+  }
+
+  type PostDataGroup = PostData[] 
+
   export let upload: boolean = false;
   export let hash: string;
   let incompleteTitle: string = "";
-  let completeTitle: string = "";
   let flag = false;
-  let candidate = 2;
+  let candidate:candidate[] = [
+    {
+      number: 0
+    },
+    {
+      number: 1
+    }
+  ]
   const candidateMax = 5;
   const candidateMin = 2;
-  const arr = []
-  let candidate_arr: candidate[] = [
-    {
-      content: "",
-    },
-    {
-      content: "",
-    },
-  ];
+  let vote = false;
 
-  let vote_container:HTMLDivElement
-  $: postDataGroup = []
-
-  const postData = {
+  const postData:PostData = {
+    options: ['', ''],
     title: '',
-    options: [],
+    voted: []
   }
 
-  const toggleUpload = () => {
+  let vote_container: HTMLDivElement;
+  let postDataGroup: PostData[] = [];
+  // const postData: PostData = {
+  //   title: "",
+  //   options: [],
+  //   selectedOptionIdx: -1
+  // };
+  let postDataCopy:Partial<PostData> = {
+    options: [ '', '']
+  }
+  console.log(postDataCopy)
+
+  
+  const createPost = () => {
     upload = !upload;
-    console.log("toggleupload", upload);
-    console.log(vote_container)
-    const title = vote_container.querySelector<HTMLInputElement>('#vote-title').value
-    const optionEls = vote_container.querySelectorAll<HTMLInputElement>('.voteCandidateInput')
-    const options = Array.from(optionEls).map(v => v.value)
-
-    postDataGroup = [...postDataGroup, {title, options}]  // 반응성을 위해!!
-    // postDataGroup = [...postDataGroup, {title, options}]  // 반응성을 위해!!
-
-
-
-    vote_container.querySelector<HTMLInputElement>('#vote-title').value = ''
-    Array.from(optionEls).forEach(v => v.value = '')
-
-    // if (upload == false) {
-    //   for (let i of candidate_arr) {
-    //     console.log(i.content);
-    //     arr.push({...i});
-    //     console.log([...arr])
-    //     i.content = "";
-    //   }
-    //   completeTitle = incompleteTitle;
-    //   incompleteTitle = "";
-    //   candidate_arr = arr;
-    // }
-
+    const title = vote_container.querySelector<HTMLInputElement>("#vote-title").value;
+    const optionEls = vote_container.querySelectorAll<HTMLInputElement>(".voteCandidateInput");
+    const options = Array.from(optionEls).map((v) => v.value);
+    if (title != "" && optionEls != undefined) {
+      postDataGroup = [...postDataGroup, { title, options, voted:[]}]; // 반응성을 위해!!
+      Array.from(optionEls).forEach((v) => (v.value = ""));
+      vote_container.querySelector<HTMLInputElement>("#vote-title").value = "";
+    }
   };
+
+  const votetoggle = () =>{
+    vote = !vote
+  }
+
+  const checkingCandidate = (e) =>{
+    // e.target.classList.add(select)
+    console.log(e.target)
+    postDataGroup
+  }
+
   const candidatePlus = () => {
-    if (candidate < candidateMax) {
-      candidate = candidate + 1;
-      candidate_arr.push({ content: "" });
-      candidate_arr = candidate_arr;
+    if (postDataCopy.options.length < candidateMax) {
+      postDataCopy = [...postDataCopy, {title, options:postDataCopy.options.length, voted}]
+      postDataCopy.options.push()
     } else {
       window.alert(`${candidateMax}개 이상의 후보를 추가할 수 없습니다.`);
     }
-  };
+  }
+
   const candidateMinus = () => {
-    if (candidate > candidateMin) {
-      candidate = candidate - 1;
-      candidate_arr.pop();
-      candidate_arr = candidate_arr;
+    if (postDataCopy.options.length > candidateMin) {
+      postDataCopy.options.pop()
     } else {
       window.alert(`후보는 최소 ${candidateMin}개 이상 필요합니다.`);
     }
-  };
-  const uploading = () => {
-    toggleUpload();
-  };
-
-  interface candidate {
-    content: string;
   }
 
+  // const candidatePlus = () => {
+  //   if (candidate.length < candidateMax) {
+  //     candidate = [...candidate, candidate.length];
+  //   } else {
+  //     window.alert(`${candidateMax}개 이상의 후보를 추가할 수 없습니다.`);
+  //   }
+  // };
+  // const candidateMinus = () => {
+  //   if (candidate.length > candidateMin) {
+  //     candidate.pop();
+  //   } else {
+  //     window.alert(`후보는 최소 ${candidateMin}개 이상 필요합니다.`);
+  //   }
+  // };
   $: {
     if (flag) location.hash = hash;
-    candidate_arr = candidate_arr;
   }
 </script>
 
@@ -97,7 +120,7 @@
     <div id="uploadContainer">
       <div id="uploadHeader">
         투표 올리기
-        <span id="uploadClose" on:click={toggleUpload}>
+        <span id="uploadClose" on:click={() => {upload = false}}>
           <Fa icon={faCircleXmark} color="white" size="1.5x" />
         </span>
       </div>
@@ -111,13 +134,11 @@
         autocomplete="off"
       />
       <div id="candidateContainer">
-        {#each candidate_arr as value}
+        {#each postDataCopy.options as option}
           <input
             type="string"
-            placeholder="후보{candidate_arr.indexOf(value) +
-              1}을(를) 입력해주세요"
+            placeholder="후보{option.length}을(를) 입력해주세요"
             class="voteCandidateInput"
-            bind:value={value.content}
             autocomplete="off"
           />
         {/each}
@@ -127,47 +148,106 @@
         <div id="minusCandidate" on:click={candidateMinus}>후보 제거하기</div>
       </div>
     </div>
-    <div id="uploadingButton" on:click={uploading}>게시하기</div>
+    <div id="uploadingButton" on:click={createPost}>게시하기</div>
   </div>
 
   <div id="postbar">
     <div id="custombar">
-      <div id="uploading" on:click={toggleUpload}>
+      <div id="uploading" on:click={() => {upload = true}}>
         <Fa icon={faPlus} color="white" size="4x" id="plus" />
       </div>
     </div>
   </div>
 
-  <div id="votePost">
-    <div id="voteTitle">
-      {completeTitle}
-    </div>
-    <div id="voteCandidateContainer">
-      {#each postDataGroup as candidate}
-        <div
-          id="candidate{candidate_arr.indexOf(candidate) + 1}"
-          class="candidate"
-        >
-        {candidate.title}
-        {candidate.options}
+  {#each candidate as candidates}
+    {#if postDataGroup[candidates.number]?.title != undefined}
+      <div id="votePost">
+        <div id="voteTitle">
+          {postDataGroup[candidates.number]?.title}
         </div>
-      {/each}
-    </div>
-  </div>
+        <div id="voteCandidateContainer">
+          {#if postDataGroup[candidates.number]?.options.length <= 5}
+            {#each candidate as options}
+              {#if postDataGroup[candidates.number].options[options.number] != undefined}
+                <div id="candidate{options.number + 1}" class="candidate {options.number == postDataGroup[candidates.number]?.voted[0].idx ? "selected" : ""}" on:click={checkingCandidate}>
+                  {postDataGroup[candidates.number].options[options.number]}
+                </div>
+              {/if}
+            {/each}
+          {/if}
+          <!--이거 메뉴창에서 후보수 줄이거나 늘리면 원래 올라갔던 애들도 올라감 해결하기-->
+        </div>
+        <div id="voteAndRevoteContainer">
+          <div id="{vote ? "revote" : "vote"}" class="button" on:click={votetoggle}>
+            <!-- {#if postDataGroup[candidates]?.voted != []} -->
+              <!-- {vote ? "다시 투표하기" : "투표하기"} -->
+            <!-- {:else} -->
+              투표하기
+            <!-- {/if} -->
+          </div>
+        </div>
+      </div>
+    {/if}
+  {/each}
 </main>
 
 <style lang="scss">
   $size: 24px;
   $backgroundColor: rgb(27, 26, 26);
   $color: rgb(208, 188, 255);
-  .candidate{
+  .select{
+
+  }
+  #voteAndRevoteContainer{
     width: 100%;
+    padding: {
+      left: 20px;
+      right: 20px;
+    };
+  }
+  .button{
+    cursor: pointer;
+    width: calc(100% - 40px);
+    text-align: center;
     border: 1px solid white;
     padding: {
+      top: 20px;
+      bottom: 20px;
+    };
+    background-color: rgba(gray, 0.5);
+    color: white;
+    margin: {
       top: 10px;
       bottom: 10px;
     };
+    border-radius: 8px;
+  }
+  #voteCandidateContainer {
+    height: auto;
+    padding: {
+      left: 20px;
+      right: 20px;
+    };
+  }
+  .candidate {
+    cursor: pointer;
+    padding: {
+      top: 15px;
+      bottom: 15px;
+      left: 10px;
+    };
+    margin: {
+      top: 8px;
+      bottom: 8px;
+    };
     color: white;
+    width: calc(100% - 10px);
+    border: 1px solid white;
+    border-radius: 5px;
+    color: white;
+  }
+  .candidate:hover{
+    background-color: rgba(gray, 0.3);
   }
   #candidatePlusMinusContainer {
     background-color: $color;
@@ -216,21 +296,26 @@
   }
 
   #votePost {
-    width: 800px;
-    height: 400px;
+    width: 700px;
+    height: auto;
     margin: auto;
+    border-radius: 20px;
     margin: {
       top: 20px;
+      bottom: 10px;
     }
     border: 1px solid white;
   }
   #voteTitle {
-    width: 100%;
+    border-radius: 20px 20px 0 0;
+    width: calc(100% - 10px);
+    // text-align: center;
     color: white;
-    border: 1px solid white;
+    // border: 1px solid white;
     padding: {
-      top: 10px;
-      bottom: 10px;
+      top: 20px;
+      bottom: 20px;
+      left: 10px;
     }
     font-size: 20px;
   }
@@ -311,12 +396,11 @@
       left: 3px;
       bottom: 3px;
     }
-
     margin: auto;
     background-color: $color;
   }
   #postbar {
-    max-width: 800px;
+    max-width: 720px;
     margin: auto;
   }
   #custombar {

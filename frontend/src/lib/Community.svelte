@@ -101,7 +101,7 @@
           class={imageInput ? "imageInput" : ""}
         >
           <div id="imgUploadText">사진/동영상 추가하기</div>
-          <img src={imageUrl} alt="" />
+          <img src={imageUrl} alt="" id="img"/>
         </label>
       </div>
     </div>
@@ -242,7 +242,7 @@
         }
       }
       .headline {
-        background-color: darkslategrey;
+        background-color: rgb(32, 31, 32);;
         color: white;
         padding: 10px 0;
         .comment {
@@ -399,14 +399,14 @@
     outline-offset: 0px;
     outline: 0;
   }
-  // #img {
-  //   margin: auto;
-  //   height: 100%;
-  // }
-  .commentInput {
-    background-color: rgb(28, 27, 31);
-    color: white;
+  #img {
+    margin: auto;
+    height: 100%;
   }
+  // .commentInput {
+  //   background-color: rgb(28, 27, 31);
+  //   color: white;
+  // }
   .commentInput:focus-visible {
     outline-offset: 0px;
     outline: 0;
@@ -421,7 +421,7 @@
       font-size: 16px;
       border: none;
       color: white;
-      background-color: white;
+      background-color: rgb(32, 31, 32);
     }
   }
   .commentUploadingBox {
@@ -435,12 +435,12 @@
 
     &::-webkit-scrollbar-thumb {
       height: 30%; /* 스크롤바의 길이 */
-      background: rgb(37, 36, 36); /* 스크롤바의 색상 */
+      background-color: rgb(208, 188, 255);; /* 스크롤바의 색상 */
       border-radius: 10px;
     }
 
     &::-webkit-scrollbar-track {
-      background: rgba(33, 122, 244, 0.1); /*스크롤바 뒷 배경 색상*/
+      background: rgba(110, 114, 118, 0.1); /*스크롤바 뒷 배경 색상*/
     }
   }
 </style>

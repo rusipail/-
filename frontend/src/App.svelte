@@ -27,16 +27,13 @@
       location.hash = hash;
       return;
     }
-    console.log(hash)
-    console.log(location.hash)
     hash = location.hash as Hash;
   }
   
   onMount(() => (flag = true));
   $: {
     if (flag) location.hash = hash;
-    console.log(hash)
-    if(hash == undefined) location.hash = "#community"
+    if(hash == undefined) location.hash = "#vote"
   }
 
 </script>
