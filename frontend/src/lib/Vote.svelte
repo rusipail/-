@@ -1,9 +1,12 @@
 <script lang="ts">
+  //Array.form(머시기) = 머시기를 배열로 쪼게준다 ["머", "시", "기"] 이런 느낌으로
   import {
     faPlus,
     faCircleXmark,
   } from "@fortawesome/free-solid-svg-icons/index.es";
   import Fa from "svelte-fa/src/fa.svelte";
+  import { object_without_properties } from "svelte/internal";
+  import {useAuth} from '../store'
 
   export let upload: boolean = false;
   export let hash: string;
@@ -12,6 +15,7 @@
     name: string
     pick: number
   }
+  //VotePost는 예전코드의 postData와 같음
   interface VotePost {
     title: string
     options: string[]
@@ -19,26 +23,47 @@
   }
 
   const MIN_VOTE_OPTION = 2  
+  const MAX_VOTE_OPTION = 5
 
   let voteContainer:HTMLDivElement
   let formTitle:string
-  let votePosts:VotePost[] = []
-  let voteForm: Partial<VotePost> = resetVoteForm()
+  let votePosts:VotePost[] = [] //votePosts는 예전코드의 postDataGroup과 같음
+  let voteForm: Partial<VotePost> = resetVoteForm() //upload에서 candidate의 갯수를 정해주는 친구 예전코드의 postDataCopy
   let flag = false
+  
+  function change(e){
+    let pick = e.target.classList[1].at(-1)
+    let num = +e.target.parentElement.id.at(-1)
+    console.log(pick)
+    if(!votePosts[num].who.some(v => v.name === $useAuth.name)) {
+      votePosts[num].who.push({
+        name: $useAuth.name,
+        pick: pick
+      })
+    }
+    votePosts = votePosts
+  }
 
+  //예전코드에는 없던 voteForm초기화 해주는 함수
   function resetVoteForm (){
     const _form:Partial<VotePost> = {
       title: '',
       options: ['', '']
     }
-    return _form
+    return _form// form은 어디에 쓰이는 함수인가요?
   }
 
+  //예전코드의 candidatePlus
   function addFormOption(){
+    if(voteForm.options.length >= MAX_VOTE_OPTION){
+      alert('최대 5개의 옵션까지 추가할 수 있습니다!!')
+      return
+    }
     voteForm.options.push('')
     voteForm = voteForm
   }
 
+  //예전코드의candidateMinus
   function removeFormOption(){
     if(voteForm.options.length <= MIN_VOTE_OPTION) {
       alert('최소 2개의 옵션은 있어야 합니다!!')
@@ -48,46 +73,46 @@
     voteForm = voteForm
   }
 
+  //예전코드의 uploadToggle
   function createPost(){
     upload = !upload;
     const title = voteContainer.querySelector<HTMLInputElement>("#vote-title").value;
     const optionEls = voteContainer.querySelectorAll<HTMLInputElement>(".voteCandidateInput");
+    console.log(optionEls)
     const options = Array.from(optionEls).map((v) => v.value);
-    votePosts = [...votePosts, { title, options, who:[]}];
-    Array.from(optionEls).forEach((v) => (v.value = ""));
+    console.log(options)
+    votePosts = [...votePosts, { title, options, who:[]}];// Q.왜 who 오류 안 뜨는지 A. 빈배열 넣었기 때문에
+    Array.from(optionEls).forEach((v) => (v.value = ""));//Q. (v) => (v.value = "")가 무슨 뜻인가요 A.v의 값에 ""을 넣어주는거
     voteContainer.querySelector<HTMLInputElement>("#vote-title").value = "";
     
   }
 
-  $: votePosts = votePosts
+  function checkingPost(){
+    const optionEls = voteContainer.querySelectorAll<HTMLInputElement>(".voteCandidateInput");
+    const options = Array.from(optionEls).map((v) => v.value)
+    for(let i = 0; i < options.length; i++){
+      console.log(options[i])
+      if(options[i] == ''){
+        window.alert('빈 후보 입력칸이 있습니다!')
+        return
+      }
+    }
+    createPost()
+  }
+
+  $: votePosts = votePosts //Q.이거 왜 하는거에요? A.반응성을 위해서
 
   $: {
     if (flag) location.hash = hash;
   }
 
-  /**
-   * {#if post[candidates.number]?.title != undefined}
-      <div id="votePost">
-        <div id="voteTitle">
-          {post[candidates.number]?.title}
-        </div>
-        <div id="voteCandidateContainer">
-          {#if post[candidates.number]?.options.length <= 5}
-            {#each candidate as options}
-              {#if post[candidates.number].options[options.number] != undefined}
-                <div id="candidate{options.number + 1}" class="candidate {options.number == post[candidates.number]?.voted[0].idx ? "selected" : ""}" on:click={checkingCandidate}>
-                  {post[candidates.number].options[options.number]}
-                </div>
-              {/if}
-            {/each}
-          {/if}
-        </div>
-      </div>
-  */
+  
 </script>
 
 <main>
+  <!--upload창 코드-->
   <div id="upload" class={upload ? "" : "hidden"} bind:this={voteContainer}>
+    <!--upload창의 header부분-->
     <div id="uploadContainer">
       <div id="uploadHeader">
         투표 올리기
@@ -96,6 +121,8 @@
         </span>
       </div>
     </div>
+
+    <!--uploading창의 무슨 투표를 올릴지 제목과 후보들을 적는 곳-->
     <div id="votingSystem">
       <input
         type="string"
@@ -119,8 +146,12 @@
         <div id="minusCandidate" on:click={removeFormOption}>후보 제거하기</div>
       </div>
     </div>
-    <div id="uploadingButton" on:click={createPost}>게시하기</div>
+
+    <!--게시하기 버튼 있는 제일 마지막 부분-->
+    <div id="uploadingButton" on:click={checkingPost}>게시하기</div>
   </div>
+
+  <!--투표생성하는  +버튼 있는 바-->
   <div id="postbar">
     <div id="custombar">
       <div id="uploading" on:click={() => {upload = true}}>
@@ -128,19 +159,22 @@
       </div>
     </div>
   </div>
+
+  <!--투표게시물 코드-->
   <div class="postListContainer">
-    {#each votePosts as post, i}
-    <div style="padding:5px;">
-      <h3>{i + 1}번째 투표!!</h3>
-      <div class="postContainer">
-          <div class="post-title">{post.title}</div>
-          <ul>
-            {#each post.options as opt}
-              <li>{opt}</li>
-            {/each}
-          </ul>
+    {#each votePosts as post, postNum}
+      {#if post.title != '' && !post.options.every(option => option === '')}
+        <div style="padding:5px;">
+          <div class="postContainer">
+            <div class="post-title"><strong>{post.title}</strong></div>
+            <ul id={`vote-${postNum}`}>
+              {#each post.options as opt, i}
+                <li class="candidate c{i}" class:selected={(votePosts[postNum].who.find(v => v.name === $useAuth.name))?.pick == i} on:click={change}>{opt}</li>
+              {/each}
+            </ul>
+          </div>
         </div>
-    </div>
+      {/if}
     {/each}
   </div>
 </main>
@@ -149,6 +183,13 @@
   $size: 24px;
   $backgroundColor: rgb(27, 26, 26);
   $color: rgb(208, 188, 255);
+
+  .selected{
+    background-color: $color;
+  }
+  .howManyVote{
+    color: white;
+  }
 
   #voteAndRevoteContainer{
     width: 100%;
@@ -159,7 +200,7 @@
   }
   .button{
     cursor: pointer;
-    width: calc(100% - 40px);
+    width: calc(100% - 75px);
     text-align: center;
     border: 1px solid white;
     padding: {
@@ -168,6 +209,7 @@
     };
     background-color: rgba(gray, 0.5);
     color: white;
+    margin: auto;
     margin: {
       top: 10px;
       bottom: 10px;
@@ -191,9 +233,10 @@
     margin: {
       top: 8px;
       bottom: 8px;
+      right: 20px;
     };
     color: white;
-    width: calc(100% - 10px);
+    width: calc(100% - 50px);
     border: 1px solid white;
     border-radius: 5px;
     color: white;
@@ -402,8 +445,12 @@
 
 
   .postListContainer{
-    width: 80%;
+    width: 720px;
     margin: auto;
+    padding: {
+      left: 20px;
+      right: 20px;
+    };
     .postContainer {
       border-radius: 10px;
       border: 2px solid white;
@@ -412,7 +459,9 @@
     }
 
     .post-title{
+      color: white;
       font-size: large;
     }
+
   }
 </style>
