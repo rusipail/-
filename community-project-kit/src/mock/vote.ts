@@ -7,7 +7,7 @@ export const voteMockData = [
       '후보3',
       '후보4',
       '후보5',
-    ],
+    ]
     selectedOptionIdx : -1
   },
   {
@@ -18,7 +18,7 @@ export const voteMockData = [
       '국어',
       '사회',
       '영어',
-    ],
+    ]
     selectedOptionIdx : 1
   }
 ]

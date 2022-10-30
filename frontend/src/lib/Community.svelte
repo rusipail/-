@@ -7,11 +7,25 @@
     faPlus,
     faCircleXmark,
   } from "@fortawesome/free-solid-svg-icons/index.es";
-  import { mockData } from "../mock";
+  import { community_MockData } from "../store/mock";
+  import type {Community} from "../store/mock"
+  import type {Comment} from "../store/mock"
+  import { get} from "svelte/store";
+  // import { mockData } from "src/mock";
 
   export let hash: string;
   export let upload: boolean;
 
+  type MockData = Community
+  let mockData:MockData[]=[];
+  console.log(mockData)
+  community_MockData.subscribe( v =>{
+      // // console.log()
+      // mockData.push(...v)
+      // console.log(v)
+      console.log(mockData)
+    }
+  )
   let imageUrl = "";
   let imageInput = false;
   let flag = false;
@@ -24,7 +38,7 @@
   let likes = 0;
   $: {
     if (flag) location.hash = hash;
-    console.log(wrapper);
+    console.log($community_MockData);
     if (con) console.log(1);
   }
 
@@ -35,22 +49,51 @@
     upload = !upload;
     if (upload == false) {
       wrapper = "";
-      console.log(imageUrl);
+      // console.log(imageUrl);
       imageUrl = null;
     }
   };
 
   const uploading = () => {
-    subject = wrapper;
-    image = imageUrl;
-    toggleUpload();
+    if(wrapper !== '' && imageUrl !== ''){
+      community_MockData.set(
+        [...$community_MockData,
+          {
+            user: 'leejuan',
+            title: wrapper,
+            image: imageUrl,
+            comment: []
+          }
+        ]
+      )
+      console.log($community_MockData)
+      // unsubscribe()
+      toggleUpload();
+    }
+    alert('제목,사진을 추가해주세요')
   };
 
   const check = (event) => {
     if (event.key === "Enter") {
       memory = commentInput;
+      const el = document.querySelector('.el')
+      el.scrollTop = el.scrollHeight
+      console.log(event.target.parentElement.classList)
+      let where = event.target.parentElement.classList[1].at(-1)
+      console.log(where)
+      console.log($community_MockData[where].comment)
+      $community_MockData[where].comment.push(
+        {
+          username:'leejuan',
+          comment: memory
+        }
+      )
+      community_MockData.set(
+        $community_MockData
+      )
       commentInput = "";
       console.log(memory);
+      // $community_MockData
       memory = "";
     }
   };
@@ -58,13 +101,13 @@
   const inputImages = (e: Event) => {
     const inputTag = e.target as HTMLInputElement;
     const files = inputTag.files;
-    console.log(files);
+    // console.log(files);
     if (!files.length) return;
 
     const reader = new FileReader();
     reader.readAsDataURL(files[0]);
     reader.onload = (event) => {
-      console.log(event.target.result);
+      // console.log(event.target.result);
       imageUrl = event.target.result as string;
       imageInput = !imageInput;
     };
@@ -117,12 +160,12 @@
 
     <!-- posts -->
     <div class="posts">
-      {#each mockData as d}
+      {#each $community_MockData as d, dNum}
         <div class="post">
           <div class="header">
             <div
               class="profile"
-              style="backgroundImage: {d.picture}; background-size: contains;"
+              style="background-size: contains;"
             />
             <div class="text">
               <div class="subject">{d.user}</div>
@@ -134,21 +177,21 @@
           </div>
           <div class="headline">
             <div class="comment">
-              <span class="reaction">
+              <!-- <span class="reaction">
                 <Fa class="fa" icon={faHeart} size="1.8x" />
-              </span>
+              </span> -->
               <span class="reaction">
                 <Fa class="fa" icon={faComment} size="1.8x" />
               </span>
             </div>
             <div class="likes">
               <strong>
-                좋아요 {d.like}개 댓글 {d.comment.length}개
+                댓글 {d.comment.length}개
               </strong>
             </div>
           </div>
           <div class="commentBox">
-            <div class="commentUploadingBox">
+            <div class="commentUploadingBox el">
               {#each d.comment as comment}
                 <div class="texts">
                   <span><strong>{comment.username}</strong> </span><span
@@ -157,7 +200,7 @@
                 </div>
               {/each}
             </div>
-            <div class="commentInputContainer">
+            <div class={`commentInputContainer commentInput${dNum}`}>
               <input
                 type="text"
                 placeholder="댓글을 입력하세요"

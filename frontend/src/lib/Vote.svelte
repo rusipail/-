@@ -7,6 +7,7 @@
   import Fa from "svelte-fa/src/fa.svelte";
   import { object_without_properties } from "svelte/internal";
   import {useAuth} from '../store'
+  import {vote_MockData} from '../store/mock'
 
   export let upload: boolean = false;
   export let hash: string;
@@ -34,13 +35,26 @@
   function change(e){
     let pick = e.target.classList[1].at(-1)
     let num = +e.target.parentElement.id.at(-1)
-    console.log(pick)
-    if(!votePosts[num].who.some(v => v.name === $useAuth.name)) {
+    console.log(votePosts[num].who.some(v => v.name == $useAuth.name))
+    if(!votePosts[num].who.some(v => v.name == $useAuth.name)) {
       votePosts[num].who.push({
         name: $useAuth.name,
         pick: pick
       })
+    } else if(votePosts[num].who.some(v => v.name === $useAuth.name)){
+      console.log(votePosts[num].who)
+      for(let i = 0; i < votePosts[num].who.length; i++){
+        console.log(i)
+        if(votePosts[num].who[i].name == $useAuth.name){
+          votePosts[num].who.splice(i, 1)
+          votePosts[num].who.push({
+            name: $useAuth.name,
+            pick: pick
+          })
+        }
+      }
     }
+    console.log(votePosts)
     votePosts = votePosts
   }
 
@@ -242,7 +256,7 @@
     color: white;
   }
   .candidate:hover{
-    background-color: rgba(gray, 0.3);
+    opacity: 0.3;
   }
   #candidatePlusMinusContainer {
     background-color: $color;

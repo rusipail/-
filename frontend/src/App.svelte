@@ -3,7 +3,7 @@
   import { fade } from "svelte/transition";
   import Message from "./lib/message/Message.svelte";
   import Community from "./lib/Community.svelte";
-  import Schedule from "./lib/Schedule.svelte";
+  import Menu from "./lib/Menu.svelte";
   import Vote from "./lib/Vote.svelte"; 
   import Menubar from "./lib/common/Menubar.svelte";
   import Sidebar from "./lib/common/Sidebar.svelte";
@@ -33,7 +33,7 @@
   onMount(() => (flag = true));
   $: {
     if (flag) location.hash = hash;
-    if(hash == undefined) location.hash = "#vote"
+    if(hash == undefined) location.hash = "#menu"
   }
 
 </script>
@@ -45,8 +45,8 @@
       <Sidebar bind:on bind:hash bind:selectedUser/>
       {#if hash && hash.includes("#message")}
         <Message bind:hash bind:selectedUser/>
-      {:else if hash === "#schedule"}
-        <Schedule/>  
+      {:else if hash === "#menu"}
+        <Menu/>  
       {:else if hash === "#community"}
         <Community bind:hash bind:upload/>
       {:else if hash === "#vote"}

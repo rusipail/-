@@ -12,9 +12,9 @@
         } else if(e.target.innerHTML === "message"){
           hash = "#message";
           selectedHash = 'message'
-        } else if(e.target.innerHTML === "menu"){
-          hash = "#menu";
-          selectedHash = 'menu'
+        } else if(e.target.innerHTML === "schedule"){
+          hash = "#schedule";
+          selectedHash = 'schedule'
         } else if(e.target.innerHTML === "vote"){
           hash = "#vote"
           selectedHash = 'vote'
@@ -29,11 +29,11 @@
       <div class="option {selectedHash === "community" ? "select" : ""}">
         community
       </div>
-      <!-- <div class="option {selectedHash === "message" ? "select" : ""}">
+      <div class="option {selectedHash === "message" ? "select" : ""}">
         message
-      </div> -->
-      <div class="option {selectedHash === "menu" ? "select" : ""}">
-        menu
+      </div>
+      <div class="option {selectedHash === "schedule" ? "select" : ""}">
+        schedule
       </div>
       <div class="option {selectedHash === "vote" ? "select" : ""}">
         vote
