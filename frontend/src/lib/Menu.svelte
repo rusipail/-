@@ -1,13 +1,29 @@
 <script lang="ts">
+  type OneRow = {
+    ATPT_OFCDC_SC_CODE: string;
+    ATPT_OFCDC_SC_NM:string;
+    CAL_INFO:string;
+    DDISH_NM: string;
+    MLSV_FGR: string;
+    MLSV_FROM_YMD: string;
+    MLSV_TO_YMD: string;
+    MLSV_YMD:string;
+    MMEAL_SC_CODE:string;
+    MMEAL_SC_NM:string;
+    NTR_INFO: string;
+    ORPLC_INFO: string;
+    SCHUL_NM:string;
+    SD_SCHUL_CODE:string;
+  }
   type Item = {
-    head?: any,
-    row?: any
+    head?: any;
+    row?: OneRow[];
   }
   type MenuType = {
     mealServiceDietInfo: Item[]
   }
 
-  let menuData = Promise.resolve<MenuType>(null)
+  let menuData = new Promise<MenuType>(res => {});
 
   const URL = `https://open.neis.go.kr/hub/mealServiceDietInfo`
 
@@ -20,7 +36,6 @@
     params.append('SD_SCHUL_CODE', '7781012')
     params.append('MLSV_FROM_YMD', mon)
     params.append('MLSV_TO_YMD', fri)
-
     try {
       menuData = await (await fetch(`${URL}?${params.toString()}`)).json()
       console.log(menuData)
@@ -30,10 +45,12 @@
   }
 
   function getWeekDate(d:Date){
-    const day = d.getDay()
-    const diff = d.getDate() - day + (day == 0 ? -6 : 1)
-    const mon = new Date(d.setDate(diff)).toISOString().substring(0, 10).split('-').join('')
-    const fri = new Date(d.setDate(diff + 5)).toISOString().substring(0, 10).split('-').join('')
+    const monDate = new Date(d);
+    monDate.setDate(monDate.getDate() - monDate.getDay());
+    const friDate = new Date(monDate);
+    friDate.setDate(friDate.getDate() + 4);
+    const mon = monDate.toISOString().substring(0, 10).split('-').join('')
+    const fri = friDate.toISOString().substring(0, 10).split('-').join('')
     return {mon, fri}
   }
 
@@ -46,9 +63,14 @@
   {:then menuData} 
     <div id="dishesContainer">
       <div id="title">점심 메뉴</div>
-      <div>{(menuData)}</div>
       <table>
-
+        {#each menuData.mealServiceDietInfo[1].row as info}
+          <tr>
+            <td>
+              {info.DDISH_NM.match(/[가-힣]+/g)}
+            </td>
+          </tr>  
+        {/each}
       </table>
     </div>
   {/await}
