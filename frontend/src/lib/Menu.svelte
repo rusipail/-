@@ -23,6 +23,47 @@
     mealServiceDietInfo: Item[]
   }
 
+  type Seeting = {
+    date: string,
+    state: boolean
+  }
+
+  const date = ["월", "화", "수", "목", "금"]
+  const dateSetting:Seeting[] = [
+    {
+      date: date[0],
+      state:false
+    },
+    {
+      date: date[1],
+      state:false
+    },
+    {
+      date: date[2],
+      state:false
+    },
+    {
+      date: date[3],
+      state:false
+    },
+    {
+      date: date[4],
+      state:false
+    }
+  ]
+
+  function checkingDay(e) {
+    console.log(e.target.innerHTML.slice(0,1))
+    for(let i = 0; i < date.length; i++){
+      if(date[i] == e.target.innerHTML.slice(0,1)){
+        dateSetting[i].state = !dateSetting[i].state;
+        console.log(dateSetting);
+      }else{
+        dateSetting[i].state = false;
+      }
+    }
+  } 
+
   let menuData = new Promise<MenuType>(res => {});
 
   const URL = `https://open.neis.go.kr/hub/mealServiceDietInfo`
@@ -44,11 +85,12 @@
     }
   }
 
+
   function getWeekDate(d:Date){
     const monDate = new Date(d);
     monDate.setDate(monDate.getDate() - monDate.getDay());
     const friDate = new Date(monDate);
-    friDate.setDate(friDate.getDate() + 4);
+    friDate.setDate(friDate.getDate() + 5);
     const mon = monDate.toISOString().substring(0, 10).split('-').join('')
     const fri = friDate.toISOString().substring(0, 10).split('-').join('')
     return {mon, fri}
@@ -58,52 +100,33 @@
 </script>
 
 <main>
+  
   {#await menuData}
     <div>메뉴 정보 불러오는 중...</div>
   {:then menuData} 
     <div id="dishesContainer">
       <div id="title">점심 메뉴</div>
       <table>
-        {#each menuData.mealServiceDietInfo[1].row as info}
-          <tr>
-            <td>
-              {info.DDISH_NM.match(/[가-힣]+/g)}
-            </td>
-          </tr>  
-        {/each}
+        <tr id="dayManageContainer">
+          {#each date as data, datanum}
+            <td class="day" on:click={checkingDay}>{date[datanum]}요일</td>
+          {/each}
+        </tr>
+          {#each menuData.mealServiceDietInfo[1].row as data, datanum}
+            <tr class="dishes{datanum} {dateSetting[datanum].state ? '' : 'dishes'}">
+              <td colspan="{data.DDISH_NM.length}">
+                <div class="weekDishes">
+                  {#each data.DDISH_NM.match(/[가-힣]+/g) as dishes, num}
+                    <td class="menu">{data.DDISH_NM.match(/[가-힣]+/g)[num]}</td>
+                  {/each}
+                </div>
+              </td>
+            </tr>
+          {/each}
       </table>
     </div>
   {/await}
-  <!-- {#await a}
-    <div>plz wait</div>
-  {:then a}
-    <div id="dishesContainer">
-      <div id="title">점심메뉴</div>
-      <table>
-        <tr id="dayManageContainer">
-          {#each configs as data}
-            <td class="day" on:click={checkingDay}>{data.day}</td>
-          {/each}
-        </tr>
-        {#each days as dishes}
-          <tr class="dishes{dishes} {week[dishes] ? '' : 'dishes'}">
-            <td colspan="5">
-              <div class="weekDishes">
-                {#each dish as i}
-                  <div class="menu">
-                    {console.log(configs[dishes].dishes[i])}
-                  </div>
-                {/each}
-                {#each dish as i}
-                  <div class="menu">{configs[dishes].dishes[i]}</div>
-                {/each}
-              </div>
-            </td>
-          </tr>
-        {/each}
-      </table>
-    </div>
-  {/await} -->
+  
 
 </main>
 
@@ -127,6 +150,8 @@
       top: 220px;
       bottom: 220px;
     }
+    font-size: large;
+    font-weight: bold;
   }
   #title {
     font-size: 30px;
@@ -138,10 +163,7 @@
   }
   .dishes {
     display: none;
-  }
-  main {
-    height: calc(100vh - 120px);
-  }
+  } 
   #dayManageContainer {
     width: 100%;
   }
@@ -167,7 +189,7 @@
     border-collapse: collapse;
     width: 1400px;
     margin: auto;
-    margin-top: 120px;
+    margin-top: 220px;
     background-color: white;
     height: 700px;
     border-radius: 8px;

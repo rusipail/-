@@ -58,16 +58,14 @@
     votePosts = votePosts
   }
 
-  //예전코드에는 없던 voteForm초기화 해주는 함수
   function resetVoteForm (){
     const _form:Partial<VotePost> = {
       title: '',
       options: ['', '']
     }
-    return _form// form은 어디에 쓰이는 함수인가요?
+    return _form
   }
 
-  //예전코드의 candidatePlus
   function addFormOption(){
     if(voteForm.options.length >= MAX_VOTE_OPTION){
       alert('최대 5개의 옵션까지 추가할 수 있습니다!!')
@@ -77,7 +75,7 @@
     voteForm = voteForm
   }
 
-  //예전코드의candidateMinus
+
   function removeFormOption(){
     if(voteForm.options.length <= MIN_VOTE_OPTION) {
       alert('최소 2개의 옵션은 있어야 합니다!!')
@@ -87,7 +85,7 @@
     voteForm = voteForm
   }
 
-  //예전코드의 uploadToggle
+
   function createPost(){
     upload = !upload;
     const title = voteContainer.querySelector<HTMLInputElement>("#vote-title").value;
@@ -95,8 +93,8 @@
     console.log(optionEls)
     const options = Array.from(optionEls).map((v) => v.value);
     console.log(options)
-    votePosts = [...votePosts, { title, options, who:[]}];// Q.왜 who 오류 안 뜨는지 A. 빈배열 넣었기 때문에
-    Array.from(optionEls).forEach((v) => (v.value = ""));//Q. (v) => (v.value = "")가 무슨 뜻인가요 A.v의 값에 ""을 넣어주는거
+    votePosts = [...votePosts, { title, options, who:[]}];
+    Array.from(optionEls).forEach((v) => (v.value = ""));
     voteContainer.querySelector<HTMLInputElement>("#vote-title").value = "";
     
   }
@@ -114,7 +112,7 @@
     createPost()
   }
 
-  $: votePosts = votePosts //Q.이거 왜 하는거에요? A.반응성을 위해서
+  $: votePosts = votePosts 
 
   $: {
     if (flag) location.hash = hash;
@@ -124,9 +122,9 @@
 </script>
 
 <main>
-  <!--upload창 코드-->
+  
   <div id="upload" class={upload ? "" : "hidden"} bind:this={voteContainer}>
-    <!--upload창의 header부분-->
+    
     <div id="uploadContainer">
       <div id="uploadHeader">
         투표 올리기
@@ -136,7 +134,7 @@
       </div>
     </div>
 
-    <!--uploading창의 무슨 투표를 올릴지 제목과 후보들을 적는 곳-->
+    
     <div id="votingSystem">
       <input
         type="string"
@@ -161,11 +159,11 @@
       </div>
     </div>
 
-    <!--게시하기 버튼 있는 제일 마지막 부분-->
+    
     <div id="uploadingButton" on:click={checkingPost}>게시하기</div>
   </div>
 
-  <!--투표생성하는  +버튼 있는 바-->
+  
   <div id="postbar">
     <div id="custombar">
       <div id="uploading" on:click={() => {upload = true}}>
@@ -174,7 +172,7 @@
     </div>
   </div>
 
-  <!--투표게시물 코드-->
+  
   <div class="postListContainer">
     {#each votePosts as post, postNum}
       {#if post.title != '' && !post.options.every(option => option === '')}
@@ -318,9 +316,7 @@
   #voteTitle {
     border-radius: 20px 20px 0 0;
     width: calc(100% - 10px);
-    // text-align: center;
     color: white;
-    // border: 1px solid white;
     padding: {
       top: 20px;
       bottom: 20px;

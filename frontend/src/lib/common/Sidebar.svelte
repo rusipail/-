@@ -29,9 +29,6 @@
       <div class="option {selectedHash === "community" ? "select" : ""}">
         community
       </div>
-      <!-- <div class="option {selectedHash === "message" ? "select" : ""}">
-        message
-      </div> -->
       <div class="option {selectedHash === "menu" ? "select" : ""}">
         menu
       </div>

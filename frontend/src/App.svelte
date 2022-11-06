@@ -33,7 +33,7 @@
   onMount(() => (flag = true));
   $: {
     if (flag) location.hash = hash;
-    if(hash == undefined) location.hash = "#menu"
+    if(hash == undefined) location.hash = "#community"
   }
 
 </script>
@@ -81,6 +81,19 @@
   
   :global(body) {
     margin: 0;
+    &::-webkit-scrollbar {
+      width: 8px; /* 스크롤바의 너비 */
+    }
+
+    &::-webkit-scrollbar-thumb {
+      height: 30%; /* 스크롤바의 길이 */
+      background-color: rgb(208, 188, 255);; /* 스크롤바의 색상 */
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(110, 114, 118, 0.1); /*스크롤바 뒷 배경 색상*/
+    }
     background-color: rgb(37, 36, 36);
   }
 </style>

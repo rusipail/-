@@ -1,5 +1,4 @@
 <script lang="ts">
-    // import Hamburger from '../assets/hamburger.svg'
     import assets from '../../assets'
     import Fa from "svelte-fa/src/fa.svelte";
     import {
@@ -38,10 +37,12 @@
         font-size: 24px;
         text-align: center;
         padding-top: 18px;">
-          {#if selectedUser == null}
-              {blank}
-            {:else}
-              {selectedUser}
+          {#if hash == '#community'}
+            <span><strong>community</strong></span>
+          {:else if hash == '#menu'}
+            <span><strong>menu</strong></span>
+          {:else if hash == '#vote'}
+            <span><strong>vote</strong></span>
           {/if}
         </div>
       <div id="profile" on:click={profileClick} class={profile ? "profileOn" : ""} style="

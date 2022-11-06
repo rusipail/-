@@ -20,13 +20,10 @@
   let mockData:MockData[]=[];
   console.log(mockData)
   community_MockData.subscribe( v =>{
-      // // console.log()
-      // mockData.push(...v)
-      // console.log(v)
       console.log(mockData)
     }
   )
-  let imageUrl = "";
+  let imageUrl = null;
   let imageInput = false;
   let flag = false;
   let wrapper: string = "";
@@ -49,13 +46,14 @@
     upload = !upload;
     if (upload == false) {
       wrapper = "";
-      // console.log(imageUrl);
       imageUrl = null;
     }
   };
 
   const uploading = () => {
-    if(wrapper !== '' && imageUrl !== ''){
+    if(wrapper == '' || imageUrl == null){
+      alert('제목,사진을 추가해주세요')
+    }else if(wrapper !== '' && imageUrl !== null){
       community_MockData.set(
         [...$community_MockData,
           {
@@ -67,10 +65,8 @@
         ]
       )
       console.log($community_MockData)
-      // unsubscribe()
       toggleUpload();
     }
-    alert('제목,사진을 추가해주세요')
   };
 
   const check = (event) => {
@@ -93,7 +89,6 @@
       )
       commentInput = "";
       console.log(memory);
-      // $community_MockData
       memory = "";
     }
   };
@@ -101,13 +96,11 @@
   const inputImages = (e: Event) => {
     const inputTag = e.target as HTMLInputElement;
     const files = inputTag.files;
-    // console.log(files);
     if (!files.length) return;
 
     const reader = new FileReader();
     reader.readAsDataURL(files[0]);
     reader.onload = (event) => {
-      // console.log(event.target.result);
       imageUrl = event.target.result as string;
       imageInput = !imageInput;
     };
@@ -177,9 +170,6 @@
           </div>
           <div class="headline">
             <div class="comment">
-              <!-- <span class="reaction">
-                <Fa class="fa" icon={faHeart} size="1.8x" />
-              </span> -->
               <span class="reaction">
                 <Fa class="fa" icon={faComment} size="1.8x" />
               </span>
@@ -273,7 +263,6 @@
               size: large;
             }
             display: flex;
-            // justify-content: center;
             align-items: center;
           }
           .subhead {
@@ -415,7 +404,7 @@
     }
     #fileUploader.imageInput {
       width: 100%;
-      height: 40%;
+      height: 50%;
     }
     #imgUploadText {
       cursor: pointer;
@@ -444,12 +433,8 @@
   }
   #img {
     margin: auto;
-    height: 100%;
+    height: calc(100% - 41px);
   }
-  // .commentInput {
-  //   background-color: rgb(28, 27, 31);
-  //   color: white;
-  // }
   .commentInput:focus-visible {
     outline-offset: 0px;
     outline: 0;
@@ -473,17 +458,17 @@
     overflow: auto;
 
     &::-webkit-scrollbar {
-      width: 8px; /* 스크롤바의 너비 */
+      width: 8px; 
     }
 
     &::-webkit-scrollbar-thumb {
-      height: 30%; /* 스크롤바의 길이 */
-      background-color: rgb(208, 188, 255);; /* 스크롤바의 색상 */
+      height: 30%;
+      background-color: rgb(208, 188, 255);; 
       border-radius: 10px;
     }
 
     &::-webkit-scrollbar-track {
-      background: rgba(110, 114, 118, 0.1); /*스크롤바 뒷 배경 색상*/
+      background: rgba(110, 114, 118, 0.1);
     }
   }
 </style>
